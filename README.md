@@ -1,1 +1,3 @@
-# Frii-App-TUTN-FRII-Server-main
+# FRII-server
+repository for the Backend Team for the FRII Web app
+# FRII-APP
