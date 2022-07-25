@@ -1,0 +1,66 @@
+require("dotenv").config();
+import _ from "lodash";
+import { Response, Request } from "express";
+import { MongooseError } from "mongoose";
+import { User, UserSchema } from "../../models/User";
+
+exports.signin = (req: Request, res: Response) => {
+  let { loginType, password } = req.body;
+
+  //find user by email
+  if (loginType.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+    let emailLowerCase = loginType.toLowerCase();
+
+    User.findOne(
+      { email: emailLowerCase },
+      (err: MongooseError, user: UserSchema) => {
+        if (err || !user) {
+          return res.status(401).json({
+            error: true,
+            message: "Email not found",
+          });
+        } else {
+          if (password === user.password) {
+            const token = "";
+            return res.status(200).json({
+              error: false,
+              message: "Login Successful",
+              token: token,
+            });
+          } else {
+            return res.status(401).json({
+              error: true,
+              message: "Password does not match",
+            });
+          }
+        }
+      }
+    );
+  } else {
+    User.findOne(
+      { username: loginType },
+      (err: MongooseError, user: UserSchema) => {
+        if (err || !user) {
+          return res.status(401).json({
+            error: true,
+            message: "UserName not found",
+          });
+        } else {
+          if (password === user.password) {
+            const token = "";
+            return res.status(200).json({
+              error: false,
+              message: "Login Successful",
+              token: token,
+            });
+          } else {
+            return res.status(401).json({
+              error: true,
+              message: "Password does not match",
+            });
+          }
+        }
+      }
+    );
+  }
+};
