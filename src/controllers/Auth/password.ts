@@ -3,6 +3,8 @@ import _ from "lodash";
 import { Response, Request } from "express";
 import { User, UserSchema } from "../../models/User";
 import { MongooseError } from "mongoose";
+import { sha512_256 } from "js-sha512";
+import otpGenerator from "otp-generator";
 
 exports.forgotPassword = (req: Request, res: Response) => {
   if (!req.body.email)
@@ -18,7 +20,10 @@ exports.forgotPassword = (req: Request, res: Response) => {
         message: "Email not found",
       });
     } else {
-      let token = "";
+      let token = otpGenerator.generate(50, {
+        upperCaseAlphabets: true,
+        specialChars: false,
+      });
       return user.updateOne(
         { resetPasswordCode: token, resetPasswordCreated: Date.now() },
         (err: MongooseError) => {
@@ -55,7 +60,7 @@ exports.resetPassword = (req: Request, res: Response) => {
         });
       } else {
         let updatedFields = {
-          password: password,
+          password: sha512_256(password),
           resetPasswordCode: "",
           resetPasswordCreated: 0,
         };
@@ -82,13 +87,13 @@ exports.changePassword = (req: Request, res: Response) => {
         error: "User does not exist",
       });
     }
-    if (password === user.password) {
+    if (sha512_256(password) === user.password) {
       return res.status(401).json({
         error: "Password does not match",
       });
     } else {
       let updatedFields = {
-        password: newPassword,
+        password: sha512_256(newPassword),
       };
 
       user = _.extend(user, updatedFields);

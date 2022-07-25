@@ -3,9 +3,8 @@ import { User, UserSchema } from "../../models/User";
 import { Response, Request } from "express";
 import { CourierClient } from "@trycourier/courier";
 import { MongooseError } from "mongoose";
-
-//Todo
-// create a function for token generation
+import otpGenerator from "otp-generator";
+import { sha512_256 } from "js-sha512";
 
 //Check if email exists
 exports.checkEmailAndValidate = async (req: Request, res: Response) => {
@@ -31,6 +30,11 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
       message: "Phone Number has been taken",
     });
   } else {
+    const otp = otpGenerator.generate(8, {
+      upperCaseAlphabets: true,
+      specialChars: false,
+    });
+
     const courier = CourierClient({
       authorizationToken: process.env.COURIER_AUTH_TOKEN,
     });
@@ -41,15 +45,17 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
           body: "Please use this code to verify your account {{code}}",
         },
         data: {
-          code: "123456",
+          code: otp,
         },
         to: {
-          email: "Ajokeakinremi43@gmail.com",
+          email,
         },
       },
     });
+
+    req.body.password = sha512_256(req.body.password);
     req.body.email = email.toLowerCase();
-    req.body.otp = "123456";
+    req.body.otp = otp;
     req.body.otpCreated = Date.now();
     let user = await new User(req.body);
     await user.save();
@@ -76,7 +82,7 @@ exports.checkOTP = async (req: Request, res: Response) => {
         });
       } else {
         let minutesLeft = (Date.now() - user.otpCreated) / (1000 * 60);
-        if (user.otp === otp && user.otpCreated > minutesLeft) {
+        if (user.otp === otp && 10 >= minutesLeft) {
           user.emailVerified = true;
           user.save((err: MongooseError) => {
             if (err) {
@@ -92,7 +98,7 @@ exports.checkOTP = async (req: Request, res: Response) => {
         } else {
           return res.status(401).json({
             error: true,
-            message: "Invalid OTP",
+            message: "OTP Expired",
           });
         }
       }
