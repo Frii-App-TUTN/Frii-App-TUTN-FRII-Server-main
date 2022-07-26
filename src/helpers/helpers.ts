@@ -17,25 +17,35 @@ helpers.hash = (str) => {
 };
 helpers.createRandomString = (strLength) => {
   strLength = typeof (strLength) == 'number' && strLength > 0 ? strLength : false;
+    
     if (strLength) {
-      
-    // Define all the possible characters that can go into a string;
-      
-    var possibleCharacters = 'abcdefghijklmnopqrstuvwxyxz';
-    var lastTwoNumbers = '1234567890';
+    
+    // Define all the possible characters that can go into a string;  
+    let possibleCharacters = 'abcdefghijklmnopqrstuvwxyxz';
+    let lastTwoNumbers = '1234567890';
 
-    var str = '';
+    let str = '';
 
       for (let i = 1; i <= strLength; i++) {
         
-      // Get random character from the possible string
-        
-      var randomCharacter = possibleCharacters.charAt(Math.floor(Math.random() * possibleCharacters.length));
-      // Append this character to the final string
-      str += randomCharacter;
+          
+          
+          if (strLength - i < 2) {
+              // Get random character from the possible string
+              let randomNumber = lastTwoNumbers.charAt(Math.floor(Math.random() * lastTwoNumbers.length));
+              // Append this character to the final string
+          str += randomNumber;
+              
+          }
+          else {
+            // Get random character from the possible string
+              let randomCharacter = possibleCharacters.charAt(Math.floor(Math.random() * possibleCharacters.length));
+            // Append this character to the final string
+             str += randomCharacter;
+          }
     }
     //return the final string
-    return str;
+    return str.toUpperCase();
 
   } else {
     return false;
