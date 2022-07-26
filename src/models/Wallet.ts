@@ -1,13 +1,13 @@
 import { Schema, model } from 'mongoose';
 
-interface WalletSchema{
+interface WalletSchema {
     customerID: string;
     accountName: string;
     currency: string;
     accountOpeningDate: string;
     lastTransactionDate: string;
     userName: { type: number; default: number; };
-    purses: string[];
+    purses: {type: string[], default: []};
     emailAddress: string;
 }
 
@@ -18,7 +18,7 @@ const WalletSchema = new Schema<WalletSchema>({
     accountOpeningDate: String,
     lastTransactionDate: String,
     userName: { type: Number, default: Date.now() },
-    purses: [String],
+    purses: {type: [String], default: []},
     emailAddress: String
 });
 
