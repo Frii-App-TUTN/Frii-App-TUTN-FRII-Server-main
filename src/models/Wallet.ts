@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-interface UserSchema{
+interface WalletSchema{
     customerID: string;
     accountName: string;
     currency: string;
@@ -9,7 +9,7 @@ interface UserSchema{
     userName: { type: string; default: string; };
 }
 
-const WalletSchema = new Schema({
+const WalletSchema = new Schema<WalletSchema>({
     customerID: String,
     accountName: String,
     currency: String,
