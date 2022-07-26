@@ -34,6 +34,11 @@ const UserSchema = new Schema({
   },
   phoneNumber: String,
   userName: String,
+  created: {
+    type: String,
+    required: false,
+    default: Date.now(),
+  },
 });
 
 export const User = model("User", UserSchema);
