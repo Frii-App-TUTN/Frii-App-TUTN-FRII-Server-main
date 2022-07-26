@@ -9,7 +9,7 @@ interface UserSchema{
     userName: string;
 }
 
-const UserSchema = new Schema<UserSchema>({
+const UserSchema = new Schema({
     firstName: String,
     lastName: String,
     email: String,
