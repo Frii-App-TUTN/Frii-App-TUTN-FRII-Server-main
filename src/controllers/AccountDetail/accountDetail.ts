@@ -51,3 +51,12 @@ exports.storeAccount = async (req: Request, res: Response) => {
     }
   }
 };
+
+exports.deleteAccount = async (req: Request, res: Response) => {
+  const { id } = req.body;
+  await AccountDetail.findByIdAndDelete(id);
+  return res.status(200).json({
+    error: false,
+    message: "Account deleted",
+  });
+};

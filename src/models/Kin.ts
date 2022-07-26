@@ -1,20 +1,18 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 interface KinSchema {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: number;
-    Relationship: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: number;
+  relationship: string;
 }
 
 const KinSchema = new Schema<KinSchema>({
-    firstName: String,
-    lastName: String,
-    email: String,
-    phoneNumber: Number,
-    Relationship: String
+  firstName: String,
+  lastName: String,
+  email: String,
+  phoneNumber: Number,
+  relationship: String,
 });
 
-const Kin = model('KYC', KinSchema);
-
-module.exports = Kin;
+export const Kin = model("Kin", KinSchema);
