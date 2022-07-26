@@ -6,7 +6,7 @@ interface WalletSchema{
     currency: string;
     accountOpeningDate: string;
     lastTransactionDate: string;
-    userName: { type: string; default: string; };
+    userName: { type: number; default: number; };
 }
 
 const WalletSchema = new Schema<WalletSchema>({
@@ -15,7 +15,7 @@ const WalletSchema = new Schema<WalletSchema>({
     currency: String,
     accountOpeningDate: String,
     lastTransactionDate: String,
-    userName: { type: String, default: Date.now() },
+    userName: { type: Number, default: Date.now() },
 });
 
 const Wallet = model('Wallet', WalletSchema);
