@@ -29,7 +29,6 @@ router.get('/create', async (req: Request,
             
             );
             await wallet.save();
-
             res.status(200).json({success: "Created wallet successfully"});
           }
         } catch (err) {
