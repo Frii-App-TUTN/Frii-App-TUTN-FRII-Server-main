@@ -3,8 +3,8 @@ const router = Router();
 const Wallet = require('../models/Wallet');
 const randomChar = require('../helpers/helpers').createRandomString;
 interface Wallet {
-    error?: string;
-    success?: string;
+    error?: boolean;
+    message?: string;
 } 
 router.get('/create', async (req: Request,
     res: Response<Wallet>, next: NextFunction) => {
@@ -12,7 +12,10 @@ router.get('/create', async (req: Request,
     try {
           let wallet = await Wallet.findOne({ emailAddress });
           if (wallet) {
-            res.status(500).json({error: "Wallet Already exists"});
+              res.status(500).json({
+                  error: true,
+                  message: "Wallet Already exists",
+              });
           } else {
               const customerID:string = randomChar(10);
               wallet = new Wallet(
@@ -29,11 +32,17 @@ router.get('/create', async (req: Request,
             
             );
             await wallet.save();
-            res.status(200).json({success: "Created wallet successfully"});
+              res.status(200).json({
+                  error: false,
+                  message: "Created wallet successfully"
+              });
           }
         } catch (err) {
           console.error(err);
-          res.status(500).json({error: 'Server error'});
+        res.status(500).json({
+            error: true,
+            message: 'Server error'
+        });
         }
     
 })
