@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import { Kin, KinSchema } from "../../models/Kin";
 import { Response, Request } from "express";
 import { MongooseError } from "mongoose";
+=======
+import { Kin } from "../../models/Kin";
+import { Response, Request } from "express";
+>>>>>>> 7787aa8 (kin added)
 
 exports.createKin = async (req: Request, res: Response) => {
   const { firstName, lastName, email, phoneNumber, relationship } = req.body;
@@ -18,6 +23,7 @@ exports.createKin = async (req: Request, res: Response) => {
     message: "Kin saved successfully",
   });
 };
+<<<<<<< HEAD
 
 exports.updateUser = (req: Request, res: Response) => {
   const { kinId, firstName, lastName, email, phoneNumber, relationship } =
@@ -39,3 +45,5 @@ exports.updateUser = (req: Request, res: Response) => {
     }
   );
 };
+=======
+>>>>>>> 7787aa8 (kin added)
