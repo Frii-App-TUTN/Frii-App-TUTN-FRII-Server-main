@@ -9,7 +9,7 @@ interface Wallet {
     message?: string;
 }
 router.post('/create', 
-    
+    require('../helpers/wallet/create')
 )
 router.get('/login', (req:Request, res:Response, next:NextFunction) => {
     return res.status(200).send('Everything fine here!')
