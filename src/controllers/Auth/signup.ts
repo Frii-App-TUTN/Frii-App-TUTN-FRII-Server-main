@@ -8,7 +8,7 @@ import { sha512_256 } from "js-sha512";
 
 //Check if email exists
 exports.checkEmailAndValidate = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password, phoneNumber } = req.body;
+  const { firstName, lastName, email, phoneNumber } = req.body;
 
   let emailExists = await User.findOne({
     email: email.toLowerCase(),
@@ -37,9 +37,10 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
     });
 
     const courier = CourierClient({
-      authorizationToken: process.env.COURIER_AUTH_TOKEN,
+      // authorizationToken: process.env.COURIER_AUTH_TOKEN,
+      authorizationToken: "pk_prod_J6X7QVBMV5408JH1MVYTQHTWM4ZR",
     });
-    await courier.send({
+    const { requestId } = await courier.send({
       message: {
         content: {
           title: "Get FRII",
@@ -89,18 +90,21 @@ exports.checkOTP = async (req: Request, res: Response) => {
       } else {
         let minutesLeft = (Date.now() - user.otpCreated) / (1000 * 60);
         if (user.otp === otp && 10 >= minutesLeft) {
-          user.emailVerified = true;
-          user.save((err: MongooseError) => {
-            if (err) {
-              return res.json({ error: err });
-            } else {
-              return res.status(200).json({
-                error: false,
-                message: `Email verified`,
-                token: "",
-              });
+          User.findOneAndUpdate(
+            { _id: user._id },
+            { emailVerified: true },
+            (err: MongooseError, user: UserSchema) => {
+              if (err) {
+                return res.json({ error: err });
+              } else {
+                return res.status(200).json({
+                  error: false,
+                  message: `Email verified`,
+                  token: "",
+                });
+              }
             }
-          });
+          );
         } else {
           return res.status(401).json({
             error: true,

@@ -1,5 +1,6 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 export interface KinSchema {
+  createdBy: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,7 +8,12 @@ export interface KinSchema {
   relationship: string;
 }
 
-const KinSchema = new Schema<KinSchema>({
+const KinSchema = new Schema({
+  createdBy: {
+    type: [Types.ObjectId],
+    ref: "User",
+    required: true,
+  },
   firstName: String,
   lastName: String,
   email: String,

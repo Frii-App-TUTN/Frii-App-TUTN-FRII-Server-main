@@ -3,7 +3,8 @@ import { Response, Request } from "express";
 import { MongooseError } from "mongoose";
 
 exports.createKin = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phoneNumber, relationship } = req.body;
+  const { userId, firstName, lastName, email, phoneNumber, relationship } =
+    req.body;
 
   let kin = new Kin({
     firstName,
@@ -11,6 +12,7 @@ exports.createKin = async (req: Request, res: Response) => {
     email,
     phoneNumber,
     relationship,
+    createdBy: userId,
   });
   await kin.save();
   return res.status(200).json({
@@ -19,12 +21,27 @@ exports.createKin = async (req: Request, res: Response) => {
   });
 };
 
-exports.updateUser = (req: Request, res: Response) => {
-  const { kinId, firstName, lastName, email, phoneNumber, relationship } =
-    req.body;
+exports.updateKin = (req: Request, res: Response) => {
+  const {
+    userId,
+    kinId,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    relationship,
+  } = req.body;
   Kin.findOneAndUpdate(
     { _id: kinId },
-    { firstName, lastName, email, phoneNumber, relationship },
+
+    {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      relationship,
+      createdBy: userId,
+    },
     (err: MongooseError, kin: KinSchema) => {
       if (err || !kin) {
         return res.status(401).json({

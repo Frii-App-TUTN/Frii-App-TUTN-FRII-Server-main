@@ -2,7 +2,7 @@ require("dotenv").config();
 import { Request, Response, NextFunction } from "express";
 import jsonwebtoken from "jsonwebtoken";
 
-exports.TokenValiator = (req: Request, res: Response, next: NextFunction) => {
+exports.tokenValidator = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.headers["authorization"] === undefined) {
       return res
