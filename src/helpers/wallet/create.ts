@@ -19,7 +19,6 @@ exports.createUser = async (req: Request,
             const https = require('https');
 
             const params = JSON.stringify({
-                "customer": 481193,
                 "preferred_bank": "access-bank",
                 "first_name": firstName,
                 "last_name": lastName,
