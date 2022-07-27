@@ -22,7 +22,7 @@ exports.storeAccount = async (req: Request, res: Response) => {
         message: "Card verified",
       });
     } else {
-      return res.status(401).json({
+      return res.status(404).json({
         error: true,
         message: "Card not verified",
       });
@@ -44,7 +44,7 @@ exports.storeAccount = async (req: Request, res: Response) => {
         message: "Bank verified",
       });
     } else {
-      return res.status(401).json({
+      return res.status(404).json({
         error: true,
         message: "Bank not verified",
       });

@@ -26,6 +26,6 @@ exports.tokenValidator = (req: Request, res: Response, next: NextFunction) => {
     }
   } catch (error) {
     // console.log(error);
-    res.status(404).send({ error: true, message: "Un Authorized" });
+    res.status(401).send({ error: true, message: "Un Authorized" });
   }
 };

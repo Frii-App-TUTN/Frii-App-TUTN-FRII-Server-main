@@ -9,7 +9,7 @@ const {
   resetPassword,
   changePassword,
 } = require("../controllers/Auth/password");
-const { SignUpValidator } = require("../helpers/Auth/Validator/SignUp");
+import { SignUpValidator } from "../helpers/Auth/Validator/SignUp";
 const { LoginValidator } = require("../helpers/Auth/Validator/Login");
 const {
   ResetPasswordValidator,

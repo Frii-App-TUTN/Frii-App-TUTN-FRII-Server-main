@@ -17,7 +17,7 @@ exports.login = (req: Request, res: Response) => {
       { email: emailLowerCase },
       (err: MongooseError, user: UserSchema) => {
         if (err || !user) {
-          return res.status(401).json({
+          return res.status(404).json({
             error: true,
             message: "Email not found",
           });
@@ -35,7 +35,7 @@ exports.login = (req: Request, res: Response) => {
                 token: token,
               });
             } else {
-              return res.status(401).json({
+              return res.status(404).json({
                 error: true,
                 message: "Password does not match",
               });
@@ -51,7 +51,7 @@ exports.login = (req: Request, res: Response) => {
       { username: loginType },
       (err: MongooseError, user: UserSchema) => {
         if (err || !user) {
-          return res.status(401).json({
+          return res.status(404).json({
             error: true,
             message: "UserName not found",
           });
@@ -64,7 +64,7 @@ exports.login = (req: Request, res: Response) => {
               token: token,
             });
           } else {
-            return res.status(401).json({
+            return res.status(404).json({
               error: true,
               message: "Password does not match",
             });

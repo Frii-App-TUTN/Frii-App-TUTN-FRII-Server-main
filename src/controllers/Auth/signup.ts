@@ -83,7 +83,7 @@ exports.checkOTP = async (req: Request, res: Response) => {
     (err: MongooseError, user: UserSchema) => {
       // if err or no user
       if (err || !user) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "Email not found",
         });
@@ -106,7 +106,7 @@ exports.checkOTP = async (req: Request, res: Response) => {
             }
           );
         } else {
-          return res.status(401).json({
+          return res.status(404).json({
             error: true,
             message: "OTP Expired",
           });

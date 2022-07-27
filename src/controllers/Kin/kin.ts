@@ -44,7 +44,7 @@ exports.updateKin = (req: Request, res: Response) => {
     },
     (err: MongooseError, kin: KinSchema) => {
       if (err || !kin) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "Kin does not exist",
         });

@@ -17,7 +17,7 @@ exports.forgotPassword = (req: Request, res: Response) => {
     (err: MongooseError, user: UserSchema) => {
       // if err or no user
       if (err || !user) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "Email not found",
         });
@@ -54,12 +54,12 @@ exports.resetPassword = (req: Request, res: Response) => {
       // if err or no user
       let minutesLeft = (Date.now() - user.resetPasswordCreated) / (1000 * 60);
       if (err || !user)
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "Invalid link code!",
         });
       else if (minutesLeft > 10) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "Link code expired!",
         });
@@ -90,12 +90,12 @@ exports.changePassword = (req: Request, res: Response) => {
   let { password, id, newPassword } = req.body;
   User.findOne({ _id: id }, (err: MongooseError, user: UserSchema) => {
     if (err || !user) {
-      return res.status(401).json({
+      return res.status(404).json({
         error: "User does not exist",
       });
     }
     if (sha512_256(password) === user.password) {
-      return res.status(401).json({
+      return res.status(404).json({
         error: "Password does not match",
       });
     } else {
