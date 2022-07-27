@@ -1,11 +1,13 @@
 require('dotenv').config()
 import { Request, Response, NextFunction, Router } from "express";
+import { MongooseError } from "mongoose";
+import { UserSchema } from "../../models/User";
 exports.createUser = async (req: Request,
     res: Response, next: NextFunction) => {
     // send request to 
     console.log(process.env.PAYSTACK_SECRET_KEY);
     const { accountName, currency, accountOpeningDate, lastTransactionDate, userName, emailAddress } = req.body;
-    
+
     try {
         const https = require('https')
 
