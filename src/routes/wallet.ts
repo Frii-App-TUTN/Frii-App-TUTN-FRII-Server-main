@@ -8,6 +8,7 @@ interface Wallet {
 } 
 router.get('/create', async (req: Request,
     res: Response<Wallet>, next: NextFunction) => {
+    // send request to paystack
     const {accountName, currency, accountOpeningDate, lastTransactionDate, userName, emailAddress } = req.body;
     try {
           let wallet = await Wallet.findOne({ emailAddress });
