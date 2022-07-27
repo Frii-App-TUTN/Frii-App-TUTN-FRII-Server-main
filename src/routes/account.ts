@@ -2,7 +2,7 @@ import { Router } from "express";
 const {
   storeAccount,
   deleteAccount,
-} = require("../controllers/Account/storeAccount");
+} = require("../controllers/AccountDetail/accountDetail");
 const router = Router();
 
 router.post("/store-account", storeAccount);

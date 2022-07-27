@@ -8,7 +8,7 @@ import { sha512_256 } from "js-sha512";
 
 //Check if email exists
 exports.checkEmailAndValidate = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, phoneNumber } = req.body;
+  const { _id, firstName, lastName, email, phoneNumber, password } = req.body;
 
   let emailExists = await User.findOne({
     email: email.toLowerCase(),
@@ -56,10 +56,11 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
 
     let otpCreated = Date.now();
     let user = new User({
+      _id,
       firstName,
       lastName,
       email: email.toLowerCase(),
-      password: sha512_256(req.body.password),
+      password: sha512_256(password),
       phoneNumber,
       otp,
       otpCreated,

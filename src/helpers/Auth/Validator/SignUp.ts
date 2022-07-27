@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
 
-exports.SignUpValidator = (req: Request, res: Response, next: NextFunction) => {
+exports.SignUpValidator = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   body("firstName", "FirstName is required").notEmpty();
   body("lastName", "LastName is required").notEmpty();
   body("phoneNumber", "PhoneNumber is required").notEmpty();
