@@ -16,7 +16,7 @@ export interface UserSchema {
 }
 
 const UserSchema = new Schema({
-  _id: String,
+  // _id: String,
   firstName: String,
   lastName: String,
   email: String,

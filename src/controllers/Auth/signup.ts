@@ -5,6 +5,7 @@ import { CourierClient } from "@trycourier/courier";
 import { MongooseError } from "mongoose";
 import otpGenerator from "otp-generator";
 import { sha512_256 } from "js-sha512";
+import jwt from "jsonwebtoken";
 
 //Check if email exists
 exports.checkEmailAndValidate = async (req: Request, res: Response) => {
@@ -88,28 +89,37 @@ exports.checkOTP = async (req: Request, res: Response) => {
           message: "Email not found",
         });
       } else {
-        let minutesLeft = (Date.now() - user.otpCreated) / (1000 * 60);
-        if (user.otp === otp && 10 >= minutesLeft) {
-          User.findOneAndUpdate(
-            { _id: user._id },
-            { emailVerified: true },
-            (err: MongooseError, user: UserSchema) => {
-              if (err) {
-                return res.json({ error: err });
-              } else {
-                return res.status(200).json({
-                  error: false,
-                  message: `Email verified`,
-                  token: "",
-                });
+        if (process.env.SECRET_HASH) {
+          let minutesLeft = (Date.now() - user.otpCreated) / (1000 * 60);
+          if (user.otp === otp && 10 >= minutesLeft) {
+            const token = jwt.sign(
+              { userId: user._id },
+              process.env.SECRET_HASH,
+              { expiresIn: "30m" }
+            );
+            User.findOneAndUpdate(
+              { _id: user._id },
+              { emailVerified: true, otp: "" },
+              (err: MongooseError, user: UserSchema) => {
+                if (err) {
+                  return res.status(404).json({ error: true, message: err });
+                } else {
+                  return res.status(200).json({
+                    error: false,
+                    message: `Email verified`,
+                    token,
+                  });
+                }
               }
-            }
-          );
+            );
+          } else {
+            return res.status(404).json({
+              error: true,
+              message: "OTP Expired",
+            });
+          }
         } else {
-          return res.status(404).json({
-            error: true,
-            message: "OTP Expired",
-          });
+          throw new Error("SECRET_HASH is not defined");
         }
       }
     }

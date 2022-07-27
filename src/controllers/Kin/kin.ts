@@ -33,7 +33,6 @@ exports.updateKin = (req: Request, res: Response) => {
   } = req.body;
   Kin.findOneAndUpdate(
     { _id: kinId },
-
     {
       firstName,
       lastName,

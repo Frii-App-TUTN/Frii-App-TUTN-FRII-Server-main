@@ -9,7 +9,7 @@ const {
   resetPassword,
   changePassword,
 } = require("../controllers/Auth/password");
-import { SignUpValidator } from "../helpers/Auth/Validator/SignUp";
+const { signUpValidator } = require("../helpers/Auth/Validator/SignUp");
 const { LoginValidator } = require("../helpers/Auth/Validator/Login");
 const {
   ResetPasswordValidator,
@@ -17,7 +17,7 @@ const {
 
 const router = Router();
 
-router.post("/signup", SignUpValidator, checkEmailAndValidate);
+router.post("/signup", signUpValidator, checkEmailAndValidate);
 router.post("/login", LoginValidator, login);
 router.post("/otp", checkOTP);
 router.post("/forgot-password", ResetPasswordValidator, forgotPassword);

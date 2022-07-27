@@ -27,6 +27,7 @@ app.use(cors());
 app.use("/", require("../routes/index"));
 app.use("/auth", require("../routes/auth"));
 app.use("/account", require("../routes/account"));
+app.use("/kin", require("../routes/kin"));
 
 const PORT = 3000 || process.env.PORT;
 const uri = process.env.MONGODB_URI;
