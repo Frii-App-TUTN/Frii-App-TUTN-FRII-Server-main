@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Router } from "express";
+const {
+  storeAccount,
+  deleteAccount,
+} = require("../controllers/Account/storeAccount");
 const router = Router();
 
-router.post(
-  "/store-account",
-  (req: Request, res: Response, next: NextFunction) => {
-    return res.status(200).send("Everything fine here!");
-  }
-);
+router.post("/store-account", storeAccount);
+router.delete("/delete-account", deleteAccount);
 
 module.exports = router;

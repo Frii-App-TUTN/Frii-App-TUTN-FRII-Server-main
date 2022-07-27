@@ -37,8 +37,7 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
     });
 
     const courier = CourierClient({
-      // authorizationToken: process.env.COURIER_AUTH_TOKEN,
-      authorizationToken: "pk_prod_J6X7QVBMV5408JH1MVYTQHTWM4ZR",
+      authorizationToken: process.env.COURIER_AUTH_TOKEN,
     });
     const { requestId } = await courier.send({
       message: {
