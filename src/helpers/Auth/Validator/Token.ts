@@ -17,7 +17,7 @@ exports.TokenValiator = (req: Request, res: Response, next: NextFunction) => {
         );
 
         if (typeof decodedValue != "string") {
-          req.body.createdBy = decodedValue.userId;
+          req.body.userId = decodedValue.userId;
         }
         next();
       } else {

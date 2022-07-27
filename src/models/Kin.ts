@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-interface KinSchema {
+export interface KinSchema {
   firstName: string;
   lastName: string;
   email: string;
