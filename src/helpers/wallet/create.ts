@@ -104,37 +104,6 @@ exports.createUser = async (req: Request,
                 message: "User with email address does not exist"
             })
         }
-        //         
-        //       );
-        //         console.log(response);
-        //         res.status(200).json('success')
-        //   let wallet = await Wallet.findOne({ emailAddress });
-        //   if (wallet) {
-        //       res.status(404).json({
-        //           error: true,
-        //           message: "Wallet Already exists",
-        //       });
-        //   } else {
-        //       const customerID:string = randomChar(10);
-        //       wallet = new Wallet(
-        //           {
-        //               customerID,
-        //               accountName,
-        //               currency,
-        //               accountOpeningDate,
-        //               lastTransactionDate,
-        //               userName,
-        //               purses: [],
-        //               emailAddress
-        //           }
-            
-        //     );
-        //     await wallet.save();
-        //       res.status(200).json({
-        //           error: false,
-        //           message: "Created wallet successfully"
-        //       });
-        //   }
     } catch (err) {
         console.error(err);
         res.status(500).json({
