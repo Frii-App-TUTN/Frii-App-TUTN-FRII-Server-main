@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-interface UserSchema{
+export interface UserSchema{
     firstName: string;
     lastName: string;
     email: string;
@@ -20,6 +20,4 @@ const UserSchema = new Schema<UserSchema>({
     userName: String
 });
 
-const User = model('User', UserSchema);
-
-module.exports = User;
+export const User = model('User', UserSchema);
