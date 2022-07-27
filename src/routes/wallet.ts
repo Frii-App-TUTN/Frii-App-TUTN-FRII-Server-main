@@ -13,7 +13,7 @@ router.get('/create', async (req: Request,
     try {
           let wallet = await Wallet.findOne({ emailAddress });
           if (wallet) {
-              res.status(500).json({
+              res.status(404).json({
                   error: true,
                   message: "Wallet Already exists",
               });
