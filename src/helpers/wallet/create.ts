@@ -5,12 +5,13 @@ exports.createUser = async (req: Request,
     // send request to 
     console.log(process.env.PAYSTACK_SECRET_KEY);
     const { accountName, currency, accountOpeningDate, lastTransactionDate, userName, emailAddress } = req.body;
+    
     try {
         const https = require('https')
 
         const params = JSON.stringify({
             "customer": 481193,
-            "preferred_bank": "access-bank"
+            "preferred_bank": "access-bank",
         })
 
         const options = {
@@ -24,8 +25,8 @@ exports.createUser = async (req: Request,
             }
         }
 
+        let data = ''
         const req = https.request(options, (res: any) => {
-            let data = ''
 
             res.on('data', (chunk: any) => {
                 data += chunk
@@ -40,7 +41,7 @@ exports.createUser = async (req: Request,
 
         req.write(params)
         req.end()
-        res.status(200).json('success')
+        res.status(200).json('success');
         //         
         //       );
         //         console.log(response);
