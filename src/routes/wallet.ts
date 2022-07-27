@@ -1,14 +1,7 @@
 require('dotenv').config()
 import { Request, Response, NextFunction, Router } from "express";
-import axios from "axios";
 const router = Router();
 const Wallet = require('../models/Wallet');
-const randomChar = require('../helpers/helpers').createRandomString;
-console.log(require('../helpers/wallet/create').createUser);
-interface Wallet {
-    error?: boolean;
-    message?: string;
-}
 router.post('/create',
   require('../helpers/wallet/create').createUser
 )
