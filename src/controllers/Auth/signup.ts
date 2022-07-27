@@ -12,7 +12,7 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
   const { _id, firstName, lastName, email, phoneNumber, password } = req.body;
 
   let emailExists = await User.findOne({
-    email: email.toLowerCase(),
+    email: email?.toLowerCase(),
   });
   let phoneNumberExists = await User.findOne({
     phoneNumber: phoneNumber,

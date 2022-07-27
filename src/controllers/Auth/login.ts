@@ -10,7 +10,7 @@ exports.login = (req: Request, res: Response) => {
   let { loginType, password } = req.body;
 
   //find user by email
-  if (loginType.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+  if (loginType?.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
     let emailLowerCase = loginType.toLowerCase();
 
     User.findOne(
