@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { connect } from 'mongoose';
 require('dotenv').config();
 const cors = require('cors');
+// const PurseRoutes = ;
 
 interface Server {
     init?: ()=> void;
@@ -27,10 +28,13 @@ app.use(cors());
 app.use('/', require('../routes/index'))
 app.use('/auth', require('../routes/auth'))
 
+// Purse Routes
+app.use('/savings', require('../savings/routes/purse'));
+
 
 
 const PORT = 3000 || process.env.PORT;
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_LINK
 type options = {
     useNewUrlParser: boolean;
     useUnifiedTopology: boolean;
@@ -41,6 +45,6 @@ const options:options = { useNewUrlParser: true, useUnifiedTopology: true }
 }
 server.init = () => {
     connect(uri)
-    .then(() => app.listen(PORT, () => log(`port started on Port ${PORT}`)))
+    .then(() => app.listen(PORT, () => log(`Server started on Port ${PORT}`)))
 }
 module.exports = server;

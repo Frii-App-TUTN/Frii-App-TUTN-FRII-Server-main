@@ -18,8 +18,12 @@ const LoanSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'User'
             }
-        ]
+        ],
+        paid_status: {
+            type: Boolean,
+            default: 0
+        }
     }
 });
 
-module.exports = model('Loans', LoanSchema);
+module.exports = model('Loan', LoanSchema);

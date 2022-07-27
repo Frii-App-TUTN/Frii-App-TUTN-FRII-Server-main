@@ -1,18 +1,24 @@
+import { Double } from 'mongodb';
 import { Schema, model } from 'mongoose';
 
 interface PurseSchema{
     name: string;
-    amount: string;
+    amount: number;
     category: string;
-    lock_status: string;
+    lock_status: boolean;
     wallet: string;
-    userName: string;
+    status: boolean
 }
 
 const PurseSchema = new Schema({
     name: String,
-    amount: {
-        type: String,
+    desc: String,
+    expectedAmount: {
+        type: Number,
+        default: 0.00,
+    },
+    currentAmount: {
+        type: Number,
         default: 0.00
     },
     category: {
@@ -26,6 +32,10 @@ const PurseSchema = new Schema({
     wallet: {
         type: Schema.Types.ObjectId,
         ref: 'Wallet'
+    },
+    status: {
+        type: Boolean,
+        default: 1
     }
 });
 
