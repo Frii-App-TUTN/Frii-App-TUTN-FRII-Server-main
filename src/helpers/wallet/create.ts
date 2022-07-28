@@ -2,7 +2,9 @@ require('dotenv').config()
 import { Request, Response, NextFunction, Router } from "express";
 import { MongooseError } from "mongoose";
 import { User, UserSchema } from "../../models/User";
-import { Customer, Wallet, WalletSchema,customerSchema } from '../../models/Wallet';
+import { Customer, Wallet, WalletSchema, customerSchema } from '../../models/Wallet';
+const https = require('https');
+
 interface Wallet {
     error?: boolean;
     message?: string;
@@ -17,7 +19,6 @@ exports.createUser = async (req: Request,
             const user = await User.findOne<UserSchema>({ email: emailAddress?.toLowerCase() });
             if (!!user) {
                 const { firstName: first, lastName: last, phoneNumber: phone } = user;
-                const https = require('https');
 
                 const params = JSON.stringify({
                     "preferred_bank": "access-bank",
@@ -48,7 +49,11 @@ exports.createUser = async (req: Request,
                         data = JSON.parse(data);
                     })
                 }).on('error', (error: any) => {
-                    console.error(error)
+                    res.status(502).json({
+                        error: true,
+                        message: error.message,
+                    });
+                   
                 })
 
                 req.write(params)
