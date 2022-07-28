@@ -11,7 +11,6 @@ exports.createUser = async (req: Request,
     res: Response<Wallet>
     ,next: NextFunction) => {
     // send request to 
-    console.log(process.env.PAYSTACK_SECRET_KEY);
     const { emailAddress } = req.body;
     try {
         const user = await User.findOne<UserSchema>({ email: emailAddress?.toLowerCase() });
