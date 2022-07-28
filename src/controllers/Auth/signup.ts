@@ -4,8 +4,8 @@ import { Response, Request } from "express";
 import { CourierClient } from "@trycourier/courier";
 import { MongooseError } from "mongoose";
 import otpGenerator from "otp-generator";
-import { sha512_256 } from "js-sha512";
 import jwt from "jsonwebtoken";
+const helpers = require("../../helpers/helpers");
 
 //Check if email exists
 exports.checkEmailAndValidate = async (req: Request, res: Response) => {
@@ -61,7 +61,7 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
       firstName,
       lastName,
       email: email.toLowerCase(),
-      password: sha512_256(password),
+      password: helpers.hash(password),
       phoneNumber,
       otp,
       otpCreated,

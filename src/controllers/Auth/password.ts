@@ -2,8 +2,8 @@ require("dotenv").config();
 import { Response, Request } from "express";
 import { User, UserSchema } from "../../models/User";
 import { MongooseError } from "mongoose";
-import { sha512_256 } from "js-sha512";
 import otpGenerator from "otp-generator";
+const helpers = require("../../helpers/helpers");
 
 exports.forgotPassword = (req: Request, res: Response) => {
   if (!req.body.email)
@@ -66,7 +66,7 @@ exports.resetPassword = (req: Request, res: Response) => {
         User.findOneAndUpdate(
           { _id: user._id },
           {
-            password: sha512_256(password),
+            password: helpers.hash(password),
             resetPasswordCode: "",
             resetPasswordCreated: 0,
           },
@@ -95,7 +95,7 @@ exports.changePassword = (req: Request, res: Response) => {
         message: "User does not exist",
       });
     }
-    if (sha512_256(password) === user.password) {
+    if (helpers.hash(password) === user.password) {
       return res.status(404).json({
         error: true,
         message: "Password does not match",
@@ -104,7 +104,7 @@ exports.changePassword = (req: Request, res: Response) => {
       User.findOneAndUpdate(
         { _id: user._id },
         {
-          password: sha512_256(newPassword),
+          password: helpers.hash(newPassword),
         },
         (err: MongooseError, user: UserSchema) => {
           if (err) {

@@ -3,8 +3,8 @@ import _ from "lodash";
 import { Response, Request } from "express";
 import { MongooseError } from "mongoose";
 import { User, UserSchema } from "../../models/User";
-import { sha512_256 } from "js-sha512";
 import jwt from "jsonwebtoken";
+const helpers = require("../../helpers/helpers");
 
 exports.login = (req: Request, res: Response) => {
   let { loginType, password } = req.body;
@@ -23,7 +23,7 @@ exports.login = (req: Request, res: Response) => {
           });
         } else {
           if (process.env.SECRET_HASH) {
-            if (sha512_256(password) === user.password) {
+            if (helpers.hash(password) === user.password) {
               const token = jwt.sign(
                 { userId: user._id },
                 process.env.SECRET_HASH,
@@ -56,7 +56,7 @@ exports.login = (req: Request, res: Response) => {
             message: "UserName not found",
           });
         } else {
-          if (sha512_256(password) === user.password) {
+          if (helpers.hash(password) === user.password) {
             const token = "";
             return res.status(200).json({
               error: false,
