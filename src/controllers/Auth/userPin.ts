@@ -28,7 +28,7 @@ exports.updatePin = (req: Request, res: Response) => {
             } else {
               return res.status(200).json({
                 error: false,
-                message: `Pin Updated`,
+                message: `Pin updated`,
               });
             }
           }
@@ -51,11 +51,42 @@ exports.updatePin = (req: Request, res: Response) => {
           } else {
             return res.status(200).json({
               error: false,
-              message: `Pin Created`,
+              message: `Pin created`,
             });
           }
         }
       );
+    }
+  });
+};
+
+exports.checkPin = (req: Request, res: Response) => {
+  let { pin, userId } = req.body;
+  User.findOne({ _id: userId }, (err: MongooseError, user: UserSchema) => {
+    if (err || !user) {
+      return res.status(404).json({
+        error: false,
+        message: "User does not exist",
+      });
+    }
+
+    if (typeof user.pin === "string") {
+      if (user.pin === helpers.hash(pin.toString())) {
+        return res.status(200).json({
+          error: false,
+          message: `Pin correct`,
+        });
+      } else {
+        return res.status(404).json({
+          error: true,
+          message: "Pin does not match",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        error: true,
+        message: `Pin has not been set`,
+      });
     }
   });
 };

@@ -14,7 +14,7 @@ const { LoginValidator } = require("../helpers/Auth/Validator/Login");
 const {
   ResetPasswordValidator,
 } = require("../helpers/Auth/Validator/ResetPassword");
-const { updatePin } = require("../controllers/Auth/userPin");
+const { updatePin, checkPin } = require("../controllers/Auth/userPin");
 const { tokenValidator } = require("../helpers/Auth/Validator/Token");
 
 const router = Router();
@@ -23,6 +23,7 @@ router.post("/signup", signUpValidator, checkEmailAndValidate);
 router.post("/login", LoginValidator, login);
 router.post("/otp", checkOTP);
 router.post("/updatePin", tokenValidator, updatePin);
+router.post("/checkPin", tokenValidator, checkPin);
 router.post("/forgot-password", ResetPasswordValidator, forgotPassword);
 router.post("/reset-password", resetPassword);
 router.post("/change-password", changePassword);
