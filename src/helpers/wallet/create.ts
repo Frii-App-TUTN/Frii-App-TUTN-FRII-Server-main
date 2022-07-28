@@ -4,7 +4,7 @@ import { MongooseError } from "mongoose";
 import { User, UserSchema } from "../../models/User";
 import { Customer, Wallet, WalletSchema, customerSchema } from '../../models/Wallet';
 const https = require('https');
-
+const createCustomer = require('./customers').createCustomer;
 interface Wallet {
     error?: boolean;
     message?: string;
@@ -14,6 +14,7 @@ exports.createWallet = async (req: Request,
     ,next: NextFunction) => {
     // send request to 
     const { emailAddress } = req.body;
+
     if (emailAddress) {
         try {
             const user = await User.findOne<UserSchema>({ email: emailAddress?.toLowerCase() });
