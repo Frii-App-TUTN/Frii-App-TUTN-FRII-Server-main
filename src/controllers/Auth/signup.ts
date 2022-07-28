@@ -4,14 +4,15 @@ import { Response, Request } from "express";
 import { CourierClient } from "@trycourier/courier";
 import { MongooseError } from "mongoose";
 import otpGenerator from "otp-generator";
-import { sha512_256 } from "js-sha512";
+import jwt from "jsonwebtoken";
+const helpers = require("../../helpers/helpers");
 
 //Check if email exists
 exports.checkEmailAndValidate = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password, phoneNumber } = req.body;
+  const { _id, firstName, lastName, email, phoneNumber, password } = req.body;
 
   let emailExists = await User.findOne({
-    email: email.toLowerCase(),
+    email: email?.toLowerCase(),
   });
   let phoneNumberExists = await User.findOne({
     phoneNumber: phoneNumber,
@@ -39,7 +40,7 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
     const courier = CourierClient({
       authorizationToken: process.env.COURIER_AUTH_TOKEN,
     });
-    await courier.send({
+    const { requestId } = await courier.send({
       message: {
         content: {
           title: "Get FRII",
@@ -56,10 +57,11 @@ exports.checkEmailAndValidate = async (req: Request, res: Response) => {
 
     let otpCreated = Date.now();
     let user = new User({
+      _id,
       firstName,
       lastName,
       email: email.toLowerCase(),
-      password: sha512_256(req.body.password),
+      password: helpers.hash(password),
       phoneNumber,
       otp,
       otpCreated,
@@ -82,30 +84,42 @@ exports.checkOTP = async (req: Request, res: Response) => {
     (err: MongooseError, user: UserSchema) => {
       // if err or no user
       if (err || !user) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "Email not found",
         });
       } else {
-        let minutesLeft = (Date.now() - user.otpCreated) / (1000 * 60);
-        if (user.otp === otp && 10 >= minutesLeft) {
-          user.emailVerified = true;
-          user.save((err: MongooseError) => {
-            if (err) {
-              return res.json({ error: err });
-            } else {
-              return res.status(200).json({
-                error: false,
-                message: `Email verified`,
-                token: "",
-              });
-            }
-          });
+        if (process.env.SECRET_HASH) {
+          let minutesLeft = (Date.now() - user.otpCreated) / (1000 * 60);
+          if (user.otp === otp && 10 >= minutesLeft) {
+            const token = jwt.sign(
+              { userId: user._id },
+              process.env.SECRET_HASH,
+              { expiresIn: "30m" }
+            );
+            User.findOneAndUpdate(
+              { _id: user._id },
+              { emailVerified: true, otp: "" },
+              (err: MongooseError, user: UserSchema) => {
+                if (err) {
+                  return res.status(404).json({ error: true, message: err });
+                } else {
+                  return res.status(200).json({
+                    error: false,
+                    message: `Email verified`,
+                    token,
+                  });
+                }
+              }
+            );
+          } else {
+            return res.status(404).json({
+              error: true,
+              message: "OTP Expired",
+            });
+          }
         } else {
-          return res.status(401).json({
-            error: true,
-            message: "OTP Expired",
-          });
+          throw new Error("SECRET_HASH is not defined");
         }
       }
     }

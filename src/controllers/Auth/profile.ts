@@ -9,7 +9,7 @@ exports.updateUser = (req: Request, res: Response) => {
     { phoneNumber, email },
     (err: MongooseError, user: UserSchema) => {
       if (err || !user) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
           message: "User does not exist",
         });
