@@ -8,8 +8,6 @@ interface Server {
     init?: ()=> void;
 }
 const server: Server = {};
-require('../controllers/customers/customers').createCustomer((data:any)=>console.log(data));
-
 type Options = {
     limit: string;
     extended: boolean;
