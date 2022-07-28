@@ -1,3 +1,4 @@
+const https = require('https')
 type callback = (err: boolean, data: any) => void;
 exports.createAccount = async (customerId: number, callback:callback) => {
                            const params = JSON.stringify({

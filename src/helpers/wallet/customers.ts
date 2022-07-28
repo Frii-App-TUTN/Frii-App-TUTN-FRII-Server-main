@@ -1,6 +1,4 @@
-const https = require('https')
-
-exports.createCustomer = async (firstName: string, lastName: string, emailAddress: string, phoneNumber: string, callback: any) => {
+exports.createCustomer = async (firstName: string, lastName: string, emailAddress: string, phoneNumber: string, callback: callback) => {
     const params = JSON.stringify({
         "email": emailAddress,
         "first_name": firstName,
@@ -27,10 +25,10 @@ exports.createCustomer = async (firstName: string, lastName: string, emailAddres
 
         res.on('end', async () => {
             data = await JSON.parse(data);
-            callback(data)
+            callback(false, data);
         })
     }).on('error', (error: any) => {
-        console.error(error)
+        callback(true, error);
     })
 
     req.write(params)
