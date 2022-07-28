@@ -8,6 +8,7 @@ interface Server {
     init?: ()=> void;
 }
 const server: Server = {};
+require('../controllers/customers/customers').createCustomer((data:any)=>console.log(data));
 
 type Options = {
     limit: string;
@@ -24,9 +25,9 @@ app.use(bodyParser.urlencoded(Options));
 app.use(cors());
 
 // Define routes
-app.use('/', require('../routes/index'))
-app.use('/auth', require('../routes/auth'))
-app.use('/wallet', require('../routes/wallet'))
+// app.use('/', require('../routes/index'))
+// app.use('/auth', require('../routes/auth'))
+// app.use('/wallet', require('../routes/wallet'))
 
 
 

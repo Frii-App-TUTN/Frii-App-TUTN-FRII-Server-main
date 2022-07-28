@@ -9,7 +9,7 @@ interface Wallet {
     error?: boolean;
     message?: string;
 }
-exports.createUser = async (req: Request,
+exports.createWallet = async (req: Request,
     res: Response<Wallet>
     ,next: NextFunction) => {
     // send request to 
@@ -75,7 +75,6 @@ exports.createUser = async (req: Request,
                     id: number;
                     first_name: string;
                     last_name: string;
-                    email: string;
                     customer_code: string;
                     phone: string;
                     risk_action: string;
@@ -84,14 +83,14 @@ exports.createUser = async (req: Request,
                     id: customerId,
                     first_name: firstName,
                     last_name: lastName,
-                    email: emailAddress,
                     customer_code: customerCode,
                     phone: phoneNumber,
                     risk_action: riskAction
                 }: customerRes = customer;
-                const customerSchema = await new Customer<customerSchema>({ id: customerId, firstName, lastName, emailAddress, customerCode, phoneNumber, riskAction })
+                const customerSchema = await new Customer<customerSchema>({ id: customerId, firstName, lastName, customerCode, phoneNumber, riskAction })
                 const wallet = await new Wallet<WalletSchema>({
                     id,
+                    emailAddress,
                     accountName,
                     accountNumber,
                     currency,

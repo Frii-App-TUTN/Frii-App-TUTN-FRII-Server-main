@@ -5,7 +5,6 @@ export interface customerSchema {
     id: number;
     firstName: string;
     lastName: string;
-    emailAddress: string;
     customerCode: string;
     phoneNumber: string;
     riskAction: string | "default" ;
@@ -15,7 +14,6 @@ const customerSchema = new Schema<customerSchema>({
     id: Number,
     firstName: String,
     lastName: String,
-    emailAddress: String,
     customerCode: String,
     phoneNumber: String,
     riskAction: { type:String, default:"default"},
@@ -27,7 +25,8 @@ export interface WalletSchema {
     currency: string;
     createdAt: string;
     updatedAt: string;
-    customer: customerSchema ;
+    customer: customerSchema;
+    emailAddress: string;
 }
 const WalletSchema = new Schema<WalletSchema>({
     id: Number,
@@ -36,6 +35,7 @@ const WalletSchema = new Schema<WalletSchema>({
     currency: String,
     createdAt: String,
     updatedAt: String,
+    emailAddress: String,
     customer: {
         type: customerSchema,
         default: {}
