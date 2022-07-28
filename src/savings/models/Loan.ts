@@ -5,25 +5,43 @@ interface LoanSchema{
     amount: string,
     due_date: Date,
     reason: string,
-    guarantors: []
+    desc: string,
+    paid_status: string,
+    guarantors: string[],
+    borrower: string,
+    dateAccepted: Date,
+    extensionDate: string
 }
 
 const LoanSchema = new Schema({
-    amount: {
-        type: String,
-        due_date: Date,
-        reason: String,
-        guarantors: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            }
-        ],
-        paid_status: {
-            type: Boolean,
-            default: 0
+    amount: Number,
+    due_date: Date,
+    reason: String,
+    desc: String,
+    guarantors: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
         }
+    ],
+    borrower: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    paid_status: {
+        type: String,
+        enum: ['pending', 'declined', 'accepted', 'paid', 'unpaid'],
+        default: 'pending'
+    },
+    dateAccepted: {
+        type: Date,
+        default: Date
+    },
+    extensionDate: {
+        type: Date,
+        default: null
     }
-});
+
+}, {timestamps: true});
 
 module.exports = model('Loan', LoanSchema);

@@ -4,6 +4,8 @@ import { Schema, model } from 'mongoose';
 interface PurseSchema{
     name: string;
     amount: number;
+    expectedAmount: number,
+    currentAmount: number,
     category: string;
     lock_status: boolean;
     wallet: string;
@@ -15,11 +17,11 @@ const PurseSchema = new Schema({
     desc: String,
     expectedAmount: {
         type: Number,
-        default: 0.00,
+        default: 0,
     },
     currentAmount: {
         type: Number,
-        default: 0.00
+        default: 0
     },
     category: {
         type: String,
@@ -37,6 +39,6 @@ const PurseSchema = new Schema({
         type: Boolean,
         default: 1
     }
-});
+}, {timestamps: true});
 
 module.exports = model('Purse', PurseSchema);
