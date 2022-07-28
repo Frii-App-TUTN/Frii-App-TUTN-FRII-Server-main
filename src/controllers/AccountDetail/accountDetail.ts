@@ -4,7 +4,7 @@ import { verifyCard } from "../../helpers/Account/VerifyCard";
 import { AccountDetail } from "../../models/AccountDetail";
 
 exports.storeAccount = async (req: Request, res: Response) => {
-  const { type, cardNumber, createdBy, accountNumber, bankCode } = req.body;
+  const { type, cardNumber, userId, accountNumber, bankCode } = req.body;
   if (type === "card") {
     const response = await verifyCard(cardNumber.slice(0, 6));
     if (response.status) {
@@ -12,7 +12,7 @@ exports.storeAccount = async (req: Request, res: Response) => {
       let account = new AccountDetail({
         type,
         cardNumber,
-        createdBy,
+        createdBy: userId,
         cardBrand: response.data.brand,
         bankName: response.data.bank,
       });
@@ -34,7 +34,7 @@ exports.storeAccount = async (req: Request, res: Response) => {
         type,
         cardNumber,
         accountName: response.data.account_name,
-        createdBy,
+        createdBy: userId,
         accountNumber,
         bankCode,
       });

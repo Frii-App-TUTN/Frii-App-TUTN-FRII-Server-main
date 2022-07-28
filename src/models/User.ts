@@ -13,6 +13,7 @@ export interface UserSchema {
   emailVerified: boolean;
   resetPasswordCreated: number;
   resetPasswordCode: string;
+  pin: string;
 }
 
 const UserSchema = new Schema({
@@ -34,6 +35,7 @@ const UserSchema = new Schema({
   },
   phoneNumber: String,
   userName: String,
+  pin: String,
   created: {
     type: String,
     required: false,

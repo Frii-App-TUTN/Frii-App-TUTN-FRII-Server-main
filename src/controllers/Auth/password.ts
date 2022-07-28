@@ -1,5 +1,4 @@
 require("dotenv").config();
-import _ from "lodash";
 import { Response, Request } from "express";
 import { User, UserSchema } from "../../models/User";
 import { MongooseError } from "mongoose";
@@ -76,6 +75,7 @@ exports.resetPassword = (req: Request, res: Response) => {
               return res.json({ error: err });
             } else {
               return res.status(200).json({
+                error: false,
                 message: `Password Updated`,
               });
             }
@@ -91,12 +91,14 @@ exports.changePassword = (req: Request, res: Response) => {
   User.findOne({ _id: id }, (err: MongooseError, user: UserSchema) => {
     if (err || !user) {
       return res.status(404).json({
-        error: "User does not exist",
+        error: true,
+        message: "User does not exist",
       });
     }
     if (sha512_256(password) === user.password) {
       return res.status(404).json({
-        error: "Password does not match",
+        error: true,
+        message: "Password does not match",
       });
     } else {
       User.findOneAndUpdate(
@@ -109,6 +111,7 @@ exports.changePassword = (req: Request, res: Response) => {
             return res.json({ error: err });
           } else {
             return res.status(200).json({
+              error: false,
               message: `Password Updated`,
             });
           }
