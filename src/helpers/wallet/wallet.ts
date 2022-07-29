@@ -25,7 +25,7 @@ exports.createWallet = async (req: Request,
                         createAccount(Id, async (err: boolean, data: any) => {
                             if (!err) {
                                 const {
-                                    id,
+                                    id: accountId,
                                     account_name: accountName,
                                     account_number: accountNumber,
                                     currency,
@@ -51,7 +51,7 @@ exports.createWallet = async (req: Request,
                                 }: customerRes = customer;
                                 const customerSchema = await new Customer<customerSchema>({ id: customerId, firstName, lastName, customerCode, phoneNumber, riskAction })
                                 const wallet = await new Wallet<WalletSchema>({
-                                    id,
+                                    accountId,
                                     emailAddress,
                                     accountName,
                                     accountNumber,
