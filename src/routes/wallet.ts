@@ -1,10 +1,9 @@
 require('dotenv').config();
 import { Router } from "express";
 const router = Router();
-router.post('/create',
-  require('../helpers/wallet/wallet').createWallet
-)
-router.get('/fetch', require('../helpers/wallet/wallet').fetchWallet)
+const { createWallet, fetchWallet } = require('../controllers/wallet');
+router.post('/create', createWallet);
+router.get('/fetch', fetchWallet);
 
 
 module.exports = router;
