@@ -62,7 +62,7 @@ exports.createWallet = async (req: Request,
                                     customer: customerSchema
                                 });
                                 wallet.save((err) => {
-                                    if (err) return res.status(507).json({ error: true, message: "Error saving wallet" })
+                                    if (err) return res.status(507).json({ error: true, message: "Error saving data" });
                                     else return res.status(201).json({ error: false, message: 'success', data: wallet });
                                 });
                             } else {
