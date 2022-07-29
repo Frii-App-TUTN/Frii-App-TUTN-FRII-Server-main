@@ -22,60 +22,68 @@ exports.createWallet = async (req: Request,
                 const { firstName: first, lastName:last, phoneNumber:phone } = user;
                 createCustomer(first, last, phone, async (err: boolean, data: any) => {
                     if (!err) {
-                        if (data) {
-                            const { id: Id } = data;
-                    
- 
-                            res.status(201).json({
-                                error: false,
-                                message: 'success'
-                            });
-                            const {
-                                id,
-                                account_name: accountName,
-                                account_number: accountNumber,
-                                currency,
-                                created_at: createdAt,
-                                updated_at: updatedAt,
-                                customer
-                            } = data?.data;
-                            type customerRes = {
-                                id: number;
-                                first_name: string;
-                                last_name: string;
-                                customer_code: string;
-                                phone: string;
-                                risk_action: string;
+                            const { id: Id } = data;       
+                        createAccount(Id, async(err:boolean, data:any) => {
+                            if (!err) {
+                                res.status(201).json({
+                                    error: false,
+                                    message: 'success'
+                                });
+                                const {
+                                    id,
+                                    account_name: accountName,
+                                    account_number: accountNumber,
+                                    currency,
+                                    created_at: createdAt,
+                                    updated_at: updatedAt,
+                                    customer
+                                } = data?.data;
+                                type customerRes = {
+                                    id: number;
+                                    first_name: string;
+                                    last_name: string;
+                                    customer_code: string;
+                                    phone: string;
+                                    risk_action: string;
+                                }
+                                const {
+                                    id: customerId,
+                                    first_name: firstName,
+                                    last_name: lastName,
+                                    customer_code: customerCode,
+                                    phone: phoneNumber,
+                                    risk_action: riskAction
+                                }: customerRes = customer;
+                                const customerSchema = await new Customer<customerSchema>({ id: customerId, firstName, lastName, customerCode, phoneNumber, riskAction })
+                                const wallet = await new Wallet<WalletSchema>({
+                                    id,
+                                    emailAddress,
+                                    accountName,
+                                    accountNumber,
+                                    currency,
+                                    createdAt,
+                                    updatedAt,
+                                    customer: customerSchema
+                                });
+                                wallet.save((err) => {
+                                    if (err) return res.status(507).json({ error: true, message: "Error saving wallet" })
+                                });
+                            } else {
+                                res.status(502).json({
+                                    error: true,
+                                    message: "Unable to create account at this time"
+                                }) 
                             }
-                            const {
-                                id: customerId,
-                                first_name: firstName,
-                                last_name: lastName,
-                                customer_code: customerCode,
-                                phone: phoneNumber,
-                                risk_action: riskAction
-                            }: customerRes = customer;
-                            const customerSchema = await new Customer<customerSchema>({ id: customerId, firstName, lastName, customerCode, phoneNumber, riskAction })
-                            const wallet = await new Wallet<WalletSchema>({
-                                id,
-                                emailAddress,
-                                accountName,
-                                accountNumber,
-                                currency,
-                                createdAt,
-                                updatedAt,
-                                customer: customerSchema
-                            });
-                            wallet.save((err) => {
-                                if (err) return res.status(507).json({ error: true, message: "Error saving wallet" })
-                            });
-                        }
+                        });
+                        
                     } else {
-                        res.status(404).json({
+                        res.status(406).json({
                             error: true,
-                            message: "User with email address does not exist"
-                        })        
-                    }
+                            message: "Invalid request"
+                        })  
+                       
+                        }
+                            
                 });
                     
             }
