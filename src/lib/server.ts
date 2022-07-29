@@ -24,9 +24,10 @@ app.use(bodyParser.urlencoded(Options));
 app.use(cors());
 
 // Define routes
-app.use("/", require("../routes/index"));
-app.use("/auth", require("../routes/auth"));
+app.use('/', require('../routes/index'))
+app.use('/auth', require('../routes/auth'));
 app.use("/account", require("../routes/account"));
+app.use('/wallet', require('../routes/wallet'));
 
 const PORT = 3000 || process.env.PORT;
 const uri = process.env.MONGODB_URI;
