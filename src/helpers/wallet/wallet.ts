@@ -63,7 +63,7 @@ exports.createWallet = async (req: Request,
                                 });
                                 wallet.save((err) => {
                                     if (err) return res.status(507).json({ error: true, message: "Error saving wallet" })
-                                    else return res.status(201).json({ error: false, message: 'success' });
+                                    else return res.status(201).json({ error: false, message: 'success', data: wallet });
                                 });
                             } else {
                                 res.status(502).json({
@@ -114,7 +114,10 @@ exports.fetchWallet = async (req: Request,
         try {
             const user = await Wallet.findOne<WalletSchema>({ emailAddress: emailAddress?.toLowerCase() },);
             if (user) {
-                
+                res.status(200).json({
+                    error: true,
+                    data: user,
+                })
             } else {
                 res.status(500).json({
                     error: true,
