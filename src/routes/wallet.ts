@@ -1,7 +1,6 @@
-require('dotenv').config()
-import { Request, Response, NextFunction, Router } from "express";
+require('dotenv').config();
+import { Router } from "express";
 const router = Router();
-const Wallet = require('../models/Wallet');
 router.post('/create',
   require('../helpers/wallet/wallet').createWallet
 )
