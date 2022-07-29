@@ -55,8 +55,8 @@ exports.createCustomer = async (firstName: string, lastName: string, emailAddres
             'Content-Type': 'application/json'
         }
     }
-    let data = '';
     const req = await https.request(options, (res: any) => {
+        let data = '';
 
         res.on('data', (chunk: any) => {
             data += chunk
@@ -72,4 +72,30 @@ exports.createCustomer = async (firstName: string, lastName: string, emailAddres
 
     req.write(params)
     req.end();
+};
+exports.fetchAccount = async (callback:callback) => {
+    const options = {
+        hostname: 'api.paystack.co',
+        port: 443,
+        path: '/dedicated_account/:dedicated_account_id',
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer SECRET_KEY'
+        }
+    }
+
+   await https.request(options, (res:any) => {
+        let data = ''
+
+        res.on('data', (chunk:any) => {
+            data += chunk
+        });
+
+        res.on('end', () => {
+            data = JSON.parse(data);
+            callback(false,data);
+        })
+    }).on('error', (error:any) => {
+        callback(true,error)
+    })
 };
