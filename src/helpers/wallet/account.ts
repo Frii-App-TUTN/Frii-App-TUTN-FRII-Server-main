@@ -73,11 +73,11 @@ exports.createCustomer = async (firstName: string, lastName: string, emailAddres
     req.write(params)
     req.end();
 };
-exports.fetchAccount = async (callback:callback) => {
+exports.fetchAccount = async (accountId:number,callback:callback) => {
     const options = {
         hostname: 'api.paystack.co',
         port: 443,
-        path: '/dedicated_account/:dedicated_account_id',
+        path: `/dedicated_account/${accountId}`,
         method: 'GET',
         headers: {
             Authorization: 'Bearer SECRET_KEY'
@@ -96,6 +96,6 @@ exports.fetchAccount = async (callback:callback) => {
             callback(false,data);
         })
     }).on('error', (error:any) => {
-        callback(true,error)
+        callback(true, error);
     })
 };
