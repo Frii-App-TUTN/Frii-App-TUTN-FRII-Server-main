@@ -104,6 +104,6 @@ dist
 .tern-port
 
 # vsCode set up
-#.vscode/
+.vscode/
 
 .DS_Store
