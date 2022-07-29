@@ -1,13 +1,14 @@
 require('dotenv').config()
 import { Request, Response, NextFunction, Router } from "express";
-import { MongooseError } from "mongoose";
-import { User, UserSchema } from "../../models/User";
 import { Customer, Wallet, WalletSchema, customerSchema } from '../../models/Wallet';
+import { User, UserSchema } from '../../models/User';
 const https = require('https');
 const { createCustomer, createAccount } = require('./account');
+
 interface Wallet {
-    error?: boolean;
+    error: boolean;
     message?: string;
+    data?: any;
 }
 exports.createWallet = async (req: Request,
     res: Response<Wallet>
@@ -111,10 +112,16 @@ exports.fetchWallet = async (req: Request,
     const { emailAddress } = req.body;
     if (emailAddress) {
         try {
-            const user = await User.findOne<UserSchema>({ email: emailAddress?.toLowerCase() });
-
+            const user = await Wallet.findOne<WalletSchema>({ emailAddress: emailAddress?.toLowerCase() },);
+            if (user) {
+                
+            } else {
+                res.status(500).json({
+                    error: true,
+                    message: 'account with email does not exist'
+                })
+            }
         } catch (err) {
-            console.error(err);
             res.status(500).json({
                 error: true,
                 message: 'Server error'
