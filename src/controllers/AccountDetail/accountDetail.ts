@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { verifyBank } from "../../helpers/Account/VerifyBank";
 import { verifyCard } from "../../helpers/Account/VerifyCard";
-import { AccountDetail } from "../../models";
+import { AccountDetail } from "../../models/AccountDetail";
 
 exports.storeAccount = async (req: Request, res: Response) => {
   const { type, cardNumber, createdBy, accountNumber, bankCode } = req.body;
