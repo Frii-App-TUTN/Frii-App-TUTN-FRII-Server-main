@@ -23,12 +23,8 @@ exports.createWallet = async (req: Request,
                 createCustomer(first, last, phone, async (err: boolean, data: any) => {
                     if (!err) {
                             const { id: Id } = data;       
-                        createAccount(Id, async(err:boolean, data:any) => {
+                        createAccount(Id, async (err: boolean, data: any) => {
                             if (!err) {
-                                res.status(201).json({
-                                    error: false,
-                                    message: 'success'
-                                });
                                 const {
                                     id,
                                     account_name: accountName,
@@ -67,12 +63,13 @@ exports.createWallet = async (req: Request,
                                 });
                                 wallet.save((err) => {
                                     if (err) return res.status(507).json({ error: true, message: "Error saving wallet" })
+                                    else return res.status(201).json({ error: false, message: 'success' });
                                 });
                             } else {
                                 res.status(502).json({
                                     error: true,
                                     message: "Unable to create account at this time"
-                                }) 
+                                })
                             }
                         });
                         
