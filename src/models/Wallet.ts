@@ -25,8 +25,9 @@ export interface WalletSchema {
     currency: string;
     createdAt: string;
     updatedAt: string;
-    customer: customerSchema;
+    pin?: number;
     emailAddress: string;
+    customer: customerSchema;
 }
 const WalletSchema = new Schema<WalletSchema>({
     accountId: Number,
@@ -36,6 +37,7 @@ const WalletSchema = new Schema<WalletSchema>({
     createdAt: String,
     updatedAt: String,
     emailAddress: String,
+    pin: Number,
     customer: {
         type: customerSchema,
         default: {}
