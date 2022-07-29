@@ -12,7 +12,7 @@ exports.forgotPassword = (req: Request, res: Response) => {
 
   let emailLowerCase = req.body.email.toLowerCase();
 
-  User.findOne({ email: emailLowerCase }, (err: MongooseError, user) => {
+  User.findOne({ email: emailLowerCase }, (err: MongooseError, user:UserSchema) => {
     // if err or no user
     if (err || !user) {
       return res.status(401).json({
