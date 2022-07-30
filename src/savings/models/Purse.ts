@@ -1,7 +1,7 @@
 import { Double } from 'mongodb';
 import { Schema, model } from 'mongoose';
 
-interface PurseSchema{
+export interface PurseSchema{
     name: string;
     amount: number;
     expectedAmount: number,

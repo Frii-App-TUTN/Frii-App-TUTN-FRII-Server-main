@@ -1,7 +1,7 @@
 import { builtinModules } from 'module';
 import { Schema, model } from 'mongoose';
 
-interface LoanSchema{
+export interface LoanSchema{
     amount: string,
     due_date: Date,
     reason: string,
@@ -21,14 +21,14 @@ const LoanSchema = new Schema({
     guarantors: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'Guarantor'
         }
     ],
     borrower: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    paid_status: {
+    status: {
         type: String,
         enum: ['pending', 'declined', 'accepted', 'paid', 'unpaid'],
         default: 'pending'

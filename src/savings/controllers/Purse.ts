@@ -13,9 +13,9 @@ const createPurse = async (req: Request, res: Response, next:NextFunction) => {
     const { name, expectedAmount, category, desc }:createPurse = req.body;
 
     const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ error: true, message: errors.array() });
-  }
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: true, message: errors.array() });
+    }
     try {
         let purseData =  await Purse.findOne({name});
 

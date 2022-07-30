@@ -30,8 +30,9 @@ app.use("/account", require("../routes/account"));
 app.use("/kin", require("../routes/kin"));
 
 
-// Purse Routes
+// Saving Routes
 app.use('/savings', require('../savings/routes/purse'));
+app.use('/savings', require('../savings/routes/loans'));
 
 
 const PORT = 3000 || process.env.PORT;
