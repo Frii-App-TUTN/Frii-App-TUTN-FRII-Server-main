@@ -29,11 +29,18 @@ exports.login = (req: Request, res: Response) => {
                 process.env.SECRET_HASH,
                 { expiresIn: "30m" }
               );
-              return res.status(200).json({
-                error: false,
-                message: "Login Successful",
-                token: token,
-              });
+              if (user.emailVerified) {
+                return res.status(200).json({
+                  error: false,
+                  message: "Login Successful",
+                  token: token,
+                });
+              } else {
+                return res.status(404).json({
+                  error: true,
+                  message: "Email not verified",
+                });
+              }
             } else {
               return res.status(404).json({
                 error: true,
@@ -56,18 +63,31 @@ exports.login = (req: Request, res: Response) => {
             message: "UserName not found",
           });
         } else {
-          if (helpers.hash(password) === user.password) {
-            const token = "";
-            return res.status(200).json({
-              error: false,
-              message: "Login Successful",
-              token: token,
-            });
-          } else {
-            return res.status(404).json({
-              error: true,
-              message: "Password does not match",
-            });
+          if (process.env.SECRET_HASH) {
+            if (helpers.hash(password) === user.password) {
+              if (user.emailVerified) {
+                const token = jwt.sign(
+                  { userId: user._id },
+                  process.env.SECRET_HASH,
+                  { expiresIn: "30m" }
+                );
+                return res.status(200).json({
+                  error: false,
+                  message: "Login Successful",
+                  token: token,
+                });
+              } else {
+                return res.status(404).json({
+                  error: true,
+                  message: "Email not verified",
+                });
+              }
+            } else {
+              return res.status(404).json({
+                error: true,
+                message: "Password does not match",
+              });
+            }
           }
         }
       }
