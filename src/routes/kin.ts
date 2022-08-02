@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Router } from "express";
+const { createKin, updateKin } = require("../controllers/Kin/kin");
+const { tokenValidator } = require("../helpers/Auth/Validator/Token");
+
 const router = Router();
 
-router.post(
-  "/create-kin",
-  (req: Request, res: Response, next: NextFunction) => {
-    return res.status(200).send("Everything fine here!");
-  }
-);
+router.post("/create-kin", tokenValidator, createKin);
+router.post("/update-kin", tokenValidator, updateKin);
 
 module.exports = router;

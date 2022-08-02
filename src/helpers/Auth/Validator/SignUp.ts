@@ -1,32 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
+import { check, validationResult } from "express-validator";
 
-exports.SignUpValidator = (req: Request, res: Response, next: NextFunction) => {
-  body("firstName", "FirstName is required").notEmpty();
-  body("lastName", "LastName is required").notEmpty();
-  body("phoneNumber", "PhoneNumber is required").notEmpty();
+exports.signUpValidator = [
+  check("firstName", "FirstName is required").notEmpty(),
+  check("lastName", "LastName is required").notEmpty(),
+  check("phoneNumber", "PhoneNumber is required").notEmpty(),
 
-  body("email")
+  check("email")
     .matches(
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )
-    .withMessage("Email doesn't exist");
+    .withMessage("Email doesn't exist"),
 
   //password
-  body("password", "Password is required").notEmpty();
+  check("password", "Password is required").notEmpty(),
 
-  body("password")
+  check("password")
     .isLength({ min: 7 })
-    .withMessage("Password must contain at least 7 characters");
+    .withMessage("Password must contain at least 7 characters"),
 
-  body("phoneNumber")
+  check("phoneNumber")
     .isLength({ min: 10 })
-    .withMessage("Please enter a valid Phone Number");
-
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ error: true, message: errors.array() });
-  }
-  //errors
-  next();
-};
+    .withMessage("Please enter a valid Phone Number"),
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: true, message: errors.array() });
+    } else {
+      //errors
+      next();
+    }
+  },
+];
