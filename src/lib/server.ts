@@ -8,7 +8,6 @@ interface Server {
   init?: () => void;
 }
 const server: Server = {};
-
 type Options = {
   limit: string;
   extended: boolean;

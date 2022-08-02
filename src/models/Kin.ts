@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { Schema, model, Types } from "mongoose";
+=======
+import { Schema, model } from "mongoose";
+
+>>>>>>> f8236c40ae72b92882f63b1f097118918494db55
 export interface KinSchema {
   createdBy: string;
   firstName: string;

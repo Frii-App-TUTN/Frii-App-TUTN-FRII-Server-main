@@ -1,6 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 
-export interface AccountDatailSchema {
+export interface AccountDetailSchema {
   createdBy: string;
   type: string;
   accountNumber: string;

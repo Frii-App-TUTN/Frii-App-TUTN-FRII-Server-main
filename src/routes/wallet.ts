@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 require('dotenv').config()
 import { Request, Response, NextFunction, Router } from "express";
 import axios from "axios";
@@ -103,6 +104,14 @@ req.write(params)
 router.get('/login', (req:Request, res:Response, next:NextFunction) => {
     return res.status(200).send('Everything fine here!')
 })
+=======
+require('dotenv').config();
+import { Router } from "express";
+const router = Router();
+const { createWallet, fetchWallet } = require('../controllers/wallet');
+router.post('/create', createWallet);
+router.get('/fetch', fetchWallet);
+>>>>>>> f8236c40ae72b92882f63b1f097118918494db55
 
 
 module.exports = router;
