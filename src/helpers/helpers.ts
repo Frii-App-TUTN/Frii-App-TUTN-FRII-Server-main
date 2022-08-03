@@ -5,7 +5,7 @@ interface Helpers  {
     hash?: (str?:string) => string|boolean;
   createRandomString?: (strLength?: number | boolean) => string | boolean;
   createRandomNumber?: (length: number | boolean) => Number | boolean; 
-  sendMail?: any;
+  sendMail?: (title: string, body: string, link: string, email: string) => void;
 }
 const secretKey: string|undefined = process.env.SECRET_HASH;
 const helpers: Helpers = {}
