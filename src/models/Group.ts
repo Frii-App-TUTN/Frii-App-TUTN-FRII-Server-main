@@ -3,7 +3,7 @@ export interface GroupSchema {
     id: number;
     name: string;
     members: string[];
-    createdAt: String;
+    createdAt: number;
     disabled: boolean;
     Admin: string;
 }
@@ -12,7 +12,7 @@ const GroupSchema = new Schema<GroupSchema>({
     name: String,
     members: [String],
     createdAt: {
-        type: String,
+        type: Number,
         default: Date.now(),
         required: false
     },
