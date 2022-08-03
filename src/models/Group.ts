@@ -23,10 +23,26 @@ const GroupSchema = new Schema<GroupSchema>({
         required: false
     }
 });
-export interface AddUser {
-
+export interface AddUserSchema {
+    code: number;
+    groupName: string;
+    createdAt: number;
+    expired: boolean;
+    date: number;
 }
-const AddUser = new Schema<AddUser>({
-
+const AddUserSchema = new Schema<AddUserSchema>({
+    code: Number,
+    groupName: String,
+    date: {
+        type: Number,
+        default: Date.now(),
+        required: true,
+    },
+    expired: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
 })
+export const AddUser = model('groupInvite', AddUserSchema);
 export const Group = model('Group', GroupSchema);
