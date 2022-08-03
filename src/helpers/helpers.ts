@@ -3,7 +3,8 @@ import {createHmac} from 'crypto';
 
 interface Helpers  {
     hash?: (str?:string) => string|boolean;
-    createRandomString?: (strLength?:number|boolean) => string|boolean;
+  createRandomString?: (strLength?: number | boolean) => string | boolean;
+  createRandomNumber?: (length: number | boolean) => Number | boolean; 
 }
 const secretKey: string|undefined = process.env.SECRET_HASH;
 const helpers: Helpers = {}
@@ -51,5 +52,30 @@ helpers.createRandomString = (strLength) => {
     return false;
   }
 };
+helpers.createRandomNumber = (length) => {
+  length = typeof (length) == 'number' && length > 0 ? length : false;
+    
+    if (length) {
+    
+    // Define all the possible characters that can go into a string;  
+    let Numbers = '1234567890';
+
+    let str = '';
+
+      for (let i = 1; i <= length; i++) {
+            // Get random character from the possible string
+        let randomCharacter = Numbers.charAt(Math.floor(Math.random() * Numbers.length));
+            // Append this character to the final string
+             str += randomCharacter;
+      
+    }
+    //return the final string
+    return Number(str);
+
+  } else {
+    return false;
+  }
+};
+
 module.exports = helpers;
 
