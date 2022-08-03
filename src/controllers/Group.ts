@@ -12,7 +12,7 @@ type RequestBody = {
     emailAddress?: string;
     groupName?: string;
     userEmail?: string;
-}
+};
 exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName }:RequestBody = req.body;
     if (emailAddress) {
