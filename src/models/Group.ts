@@ -28,12 +28,12 @@ export interface AddUserSchema {
     groupName: string;
     createdAt: number;
     expired: boolean;
-    date: number;
+    userEmail: String;
 }
 const AddUserSchema = new Schema<AddUserSchema>({
     code: Number,
     groupName: String,
-    date: {
+    createdAt: {
         type: Number,
         default: Date.now(),
         required: true,
@@ -43,6 +43,7 @@ const AddUserSchema = new Schema<AddUserSchema>({
         default: false,
         required: false
     },
+    userEmail: String
 })
 export const AddUser = model('groupInvite', AddUserSchema);
 export const Group = model('Group', GroupSchema);
