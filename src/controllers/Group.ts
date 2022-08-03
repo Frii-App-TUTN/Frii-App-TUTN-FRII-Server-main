@@ -95,3 +95,10 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
         })  
     }
 }
+exports.joinGroup = async (req: Request, res: Response<Group>) => { 
+    const { code } = req.params;
+    console.log(req.params, typeof code);
+    return res.status(200).json({
+        error:false,
+    })
+}
