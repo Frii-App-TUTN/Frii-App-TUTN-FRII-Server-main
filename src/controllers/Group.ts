@@ -9,8 +9,9 @@ interface Group {
     data?: any;
 }
 type RequestBody = {
-    emailAddress?: string,
-    groupName?: string
+    emailAddress?: string;
+    groupName?: string;
+    userEmail?: string;
 }
 exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName }:RequestBody = req.body;
@@ -56,7 +57,7 @@ exports.createGroup = async (req: Request, res: Response<Group>) => {
     }
 } 
 exports.addMember = async (req: Request, res: Response<Group>) => {
-    const { emailAddress, groupName }: RequestBody = req.body;
+    const { userEmail, groupName }: RequestBody = req.body;
     if (groupName) {
         
     } else {
