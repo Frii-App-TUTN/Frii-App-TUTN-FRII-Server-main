@@ -6,7 +6,10 @@ exports.createGroup = async (req: Request, res: Response) => {
     const user = await User.findOne<UserSchema>({ emailAddress });
     console.log(user);
     if (!!user) {
-        
+        res.status(200).json({
+            error: false,
+            message: "user found"
+        })
     } else {
         return res.status(404).json({
             error: true,
