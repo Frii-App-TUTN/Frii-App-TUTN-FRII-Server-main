@@ -66,11 +66,12 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
             let addUser = new AddUser({
                 code,
                 groupName,
-                createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                createdAt: Date.now() + 1000 * 60 * 60 * 24 * 3,
                 userEmail
             })
+            await addUser.save();
             let { Admin } = group;
-            sendMail(`Join ${groupName}`, `The Admin  {{Admin}} Of ${groupName} want's you to join his/her group.\n use the [link]({{link}}) below to join the group [{{link}}]({{link}}) \n Please ignore if you do not recognize this message`, { Admin, link }, userEmail);
+            await sendMail(`Join ${groupName}`, `The Admin  {{Admin}} Of ${groupName} want's you to join his/her group.\n use the [link]({{link}}) below to join the group [{{link}}]({{link}}) \n Please ignore if you do not recognize this message`, { Admin, link }, userEmail);
             return  res.status(200).json({
                 error: false,
                 message: "email sent"
