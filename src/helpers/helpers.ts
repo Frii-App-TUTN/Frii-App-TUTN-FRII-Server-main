@@ -5,7 +5,7 @@ interface Helpers  {
     hash?: (str?:string) => string|boolean;
   createRandomString?: (strLength?: number | boolean) => string | boolean;
   createRandomNumber?: (length: number | boolean) => Number | boolean; 
-  sendMail?: (title: string, body: string, link: string, email: string) => void;
+  sendMail?: (title: string, body: string, data: object, email: string) => void;
 }
 const secretKey: string|undefined = process.env.SECRET_HASH;
 const helpers: Helpers = {}
@@ -77,7 +77,7 @@ helpers.createRandomNumber = (length) => {
     return false;
   }
 };
-helpers.sendMail = async (title:string,body:string,link:string,email:string) => {
+helpers.sendMail = async (title:string,body:string,data:object,email:string) => {
   const courier = CourierClient({
     authorizationToken: process.env.COURIER_AUTH_TOKEN,
   });
@@ -88,9 +88,7 @@ helpers.sendMail = async (title:string,body:string,link:string,email:string) => 
         body
 
       },
-      data: {
-        link
-      },
+      data,
       to: {
         email
       },
