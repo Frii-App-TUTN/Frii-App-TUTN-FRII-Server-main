@@ -11,13 +11,17 @@ interface Group {
 exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName, } = req.body;
     if (emailAddress) {
-        const user = await User.findOne<UserSchema>({ emailAddress });
-        console.log(user, User.findOne<UserSchema>({ emailAddress }))
+        const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
+        console.log(user)
         if (!!user) {
             const id = createRandomNumber(16);
-            const idCheck = await Group.findOne({ id });
+            console.log(id);
+            const idCheck =  await Group.findOne({ id }) ?? false;
+            console.log(idCheck)
             if (!idCheck) {
-                
+                res.status(200).json({
+                    error: false
+                })
             } else {
                 res.status(500).json({
                     error: true,
