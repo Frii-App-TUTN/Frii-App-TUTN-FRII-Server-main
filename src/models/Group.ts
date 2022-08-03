@@ -6,7 +6,7 @@ export interface GroupSchema {
     createdAt: number;
     disabled: boolean;
     Admin: string;
-}
+};
 const GroupSchema = new Schema<GroupSchema>({
     id: Number,
     name: String,
@@ -23,4 +23,10 @@ const GroupSchema = new Schema<GroupSchema>({
         required: false
     }
 });
+export interface AddUser {
+
+}
+const AddUser = new Schema<AddUser>({
+
+})
 export const Group = model('Group', GroupSchema);
