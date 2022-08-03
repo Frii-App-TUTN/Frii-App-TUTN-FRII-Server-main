@@ -16,7 +16,6 @@ exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName }:RequestBody = req.body;
     if (emailAddress) {
         const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
-        console.log(user);
         if (!!user) {
             const id:number = createRandomNumber(16);
             const idCheck = await Group.findOne({ id }) ?? false;
@@ -56,3 +55,14 @@ exports.createGroup = async (req: Request, res: Response<Group>) => {
         })
     }
 } 
+exports.addMember = async (req: Request, res: Response<Group>) => {
+    const { emailAddress, groupName }: RequestBody = req.body;
+    if (groupName) {
+        
+    } else {
+        res.status(400).json({
+            error: true,
+            message: "invalid request",
+        })  
+    }
+}
