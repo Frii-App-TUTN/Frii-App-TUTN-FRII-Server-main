@@ -2,7 +2,7 @@ require('dotenv').config();
 import { Response, Request } from "express";
 import { User, UserSchema } from '../models/User'
 import { GroupSchema, Group } from '../models/Group';
-const {createRandomNumber} = require('../helpers/helpers');
+const {createRandomNumber, sendMail} = require('../helpers/helpers');
 interface Group {
     error: boolean;
     message?: string;
