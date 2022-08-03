@@ -17,5 +17,10 @@ const GroupSchema = new Schema<GroupSchema>({
         required: false
     },
     Admin: String,
+    disabled: {
+        type: Boolean,
+        default: false,
+        required: false
+    }
 });
 export const Group = model('Group', GroupSchema);
