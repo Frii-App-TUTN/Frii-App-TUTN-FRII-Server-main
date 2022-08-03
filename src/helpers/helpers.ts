@@ -1,10 +1,11 @@
 require('dotenv').config();
 import {createHmac} from 'crypto';
-
+import { CourierClient } from "@trycourier/courier";
 interface Helpers  {
     hash?: (str?:string) => string|boolean;
   createRandomString?: (strLength?: number | boolean) => string | boolean;
   createRandomNumber?: (length: number | boolean) => Number | boolean; 
+  sendMail?: any;
 }
 const secretKey: string|undefined = process.env.SECRET_HASH;
 const helpers: Helpers = {}
@@ -76,6 +77,26 @@ helpers.createRandomNumber = (length) => {
     return false;
   }
 };
+helpers.sendMail = async (title:string,body:string,link:string,email:string) => {
+  const courier = CourierClient({
+    authorizationToken: process.env.COURIER_AUTH_TOKEN,
+  });
+  const { requestId } = await courier.send({
+    message: {
+      content: {
+        title,
+        body
 
+      },
+      data: {
+        link
+      },
+      to: {
+        email
+      },
+    },
+  });
+  return requestId;
+}
 module.exports = helpers;
 
