@@ -8,20 +8,35 @@ interface Group {
     message?: string;
     data?: any;
 }
+type RequestBody = {
+    emailAddress?: string,
+    groupName?: string
+}
 exports.createGroup = async (req: Request, res: Response<Group>) => {
-    const { emailAddress, groupName, } = req.body;
+    const { emailAddress, groupName }:RequestBody = req.body;
     if (emailAddress) {
         const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
-        console.log(user)
+        console.log(user);
         if (!!user) {
-            const id = createRandomNumber(16);
-            console.log(id);
-            const idCheck =  await Group.findOne({ id }) ?? false;
-            console.log(idCheck)
+            const id:number = createRandomNumber(16);
+            const idCheck = await Group.findOne({ id }) ?? false;
+            const name: string = groupName ? groupName : "FRII" + createRandomNumber(8);
             if (!idCheck) {
-                res.status(200).json({
-                    error: false
+                const group = new Group<GroupSchema>({
+                    id,
+                    Admin: emailAddress,
+                    name,
+                    members: [],
+                    createdAt: Date.now(),
+                    disabled: false,
                 })
+                group.save();
+                return res.status(201).json({
+                    error: false,
+                    message: "created group successfully",
+                    data: group,
+                });
+                
             } else {
                 res.status(500).json({
                     error: true,
