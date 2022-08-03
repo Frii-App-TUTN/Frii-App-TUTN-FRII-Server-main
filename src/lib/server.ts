@@ -27,6 +27,7 @@ app.use("/", require("../routes/index"));
 app.use("/auth", require("../routes/auth"));
 app.use("/account", require("../routes/account"));
 app.use("/kin", require("../routes/kin"));
+app.use("/group", require("../routes/group"));
 
 const PORT = 3000 || process.env.PORT;
 const uri = process.env.MONGODB_URI;
