@@ -62,12 +62,12 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
         let group = await Group.findOne<GroupSchema>({ name: groupName });
         if (!!group) {
             let link = process.env.BASE_URL + createRandomNumber(8);
-            let {Admin} = group;
-            // sendMail(`Join ${groupName}`, `The Admin Of **${groupName}** want's you to join their group,\n use the link below to join the group [{{link}}]({{link}})`, "https://github.com", userEmail);
+            let { Admin } = group;
+            sendMail(`Join ${groupName}`, `The Admin  {{Admin}} Of ${groupName} want's you to join his/her group.\n use the [link]{{link}} below to join the group [{{link}}]({{link}})`, {Admin, link}, userEmail);
             res.status(200).json({
                 error: false,
                 message: "email sent"
-            })
+            });
         } else {
             return res.status(404).json({
                 error: true,
