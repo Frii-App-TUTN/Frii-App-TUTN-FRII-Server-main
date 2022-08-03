@@ -59,7 +59,21 @@ exports.createGroup = async (req: Request, res: Response<Group>) => {
 exports.addMember = async (req: Request, res: Response<Group>) => {
     const { userEmail, groupName }: RequestBody = req.body;
     if (groupName) {
-        
+        let group = await Group.findOne<GroupSchema>({ name: groupName });
+        if (!!group) {
+            let link = process.env.BASE_URL + createRandomNumber(8);
+            let {Admin} = group;
+            // sendMail(`Join ${groupName}`, `The Admin Of **${groupName}** want's you to join their group,\n use the link below to join the group [{{link}}]({{link}})`, "https://github.com", userEmail);
+            res.status(200).json({
+                error: false,
+                message: "email sent"
+            })
+        } else {
+            return res.status(404).json({
+                error: true,
+                message: "group with this name not found"
+            })
+        }
     } else {
         res.status(400).json({
             error: true,
