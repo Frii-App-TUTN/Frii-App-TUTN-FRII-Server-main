@@ -9,10 +9,11 @@ export interface PurseSchema{
     category: string;
     lock_status: boolean;
     wallet: string;
-    status: boolean
+    status: boolean,
+    desc?: string
 }
 
-const PurseSchema = new Schema({
+const PurseSchema = new Schema<PurseSchema>({
     name: String,
     desc: String,
     expectedAmount: {
@@ -29,15 +30,15 @@ const PurseSchema = new Schema({
     },
     lock_status: {
         type: Boolean,
-        default: 0
+        default: false
     },
-    wallet: {
-        type: Schema.Types.ObjectId,
-        ref: 'Wallet'
-    },
+    // wallet: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Wallet'
+    // },
     status: {
         type: Boolean,
-        default: 1
+        default: true
     }
 }, {timestamps: true});
 

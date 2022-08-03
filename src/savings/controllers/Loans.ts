@@ -1,6 +1,8 @@
+require("dotenv").config();
 import { Response, Request, NextFunction } from 'express'
 import { validationResult } from 'express-validator';
-const Loan = require('../models/Loan');
+// import { User } from '../../models/User';
+const { Loan, loanSchema } = require('../models/Loan');
 const { validateGuarantors, loanRequestMail }  = require('../../helpers/savings/Loan')
 
 interface loanReq{
@@ -10,6 +12,7 @@ interface loanReq{
     desc?: string,
     guarantors: string[],
     borrower: string,
+    userId?: string
 }
 
 const requestLoan = async (req:Request, res:Response) => {
@@ -26,27 +29,24 @@ const requestLoan = async (req:Request, res:Response) => {
         if(!errors.isEmpty()){
             return res.status(422).json({ error: true, message: errors.array() });
         }
-        let results = [];
+        let results: any[] = [];
+        let mails: any[] = [];
         try {
-            // if(guarantors.length > 1){
-                // for(let i = 0; i < guarantors.length; i++){
-                //     // let result = validateGuarantors(guarantors[i]);
-                //     // if()
-                //     console.log(guarantors[i]); 
-                //     console.log(validateGuarantors(guarantors[i]));
-                // }
-                guarantors.forEach(async (guarantor) => {
-                    console.log(typeof(guarantor) == "string");
-                    let result = await validateGuarantors(guarantor);
-                    if(result)
-                        results.push(result);
-                    
-                    let mail = loanRequestMail(result.guarantor.email, result.guarantor.firstname);
+            guarantors.forEach(async (guarantor) => {
+                // console.log(typeof(guarantor) == "string");
+                let result = await validateGuarantors(guarantor);
+                if(result)
+                    results.push(result);
+                
+                let mail = await loanRequestMail(result.guarantor.email, "jothamntekim@gmail.com", result.guarantor.firstName);
+                if(mail)
+                    mails.push(mail);
 
-                })
-                // console.log(results);
-            // }
-            console.log(guarantors.length); 
+                let loanModel = new Loan({amount, reason, status: "pending", due_date, desc});
+                console.log(results, mails);
+                return res.status(200).json({results, mails});
+
+            });
         } catch (error) {
             return res.status(500).json({
                 error: true,

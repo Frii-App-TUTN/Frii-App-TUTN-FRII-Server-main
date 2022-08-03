@@ -1,19 +1,19 @@
-import { builtinModules } from 'module';
 import { Schema, model } from 'mongoose';
+import { UserSchema } from '../../models/User';
 
-export interface LoanSchema{
+export interface loanSchema{
     amount: string,
     due_date: Date,
     reason: string,
     desc: string,
-    paid_status: string,
-    guarantors: string[],
-    borrower: string,
+    status: string,
+    guarantors: UserSchema,
+    borrower: UserSchema,
     dateAccepted: Date,
-    extensionDate: string
+    extensionDate: Date
 }
 
-const LoanSchema = new Schema({
+const loanSchema = new Schema<loanSchema>({
     amount: Number,
     due_date: Date,
     reason: String,
@@ -35,7 +35,7 @@ const LoanSchema = new Schema({
     },
     dateAccepted: {
         type: Date,
-        default: Date
+        default: null
     },
     extensionDate: {
         type: Date,
@@ -44,4 +44,4 @@ const LoanSchema = new Schema({
 
 }, {timestamps: true});
 
-module.exports = model('Loan', LoanSchema);
+module.exports = model('Loan', loanSchema);
