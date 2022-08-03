@@ -61,9 +61,10 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
     if (groupName) {
         let group = await Group.findOne<GroupSchema>({ name: groupName });
         if (!!group) {
-            let link = process.env.BASE_URL + createRandomNumber(8);
+            const code = createRandomNumber(8);
+            let link = process.env.BASE_URL + code;
             let addUser = new AddUser({
-                link,
+                code,
                 groupName,
                 createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
                 userEmail
