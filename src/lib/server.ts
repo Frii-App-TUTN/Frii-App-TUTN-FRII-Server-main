@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
+import path from "path";
 require("dotenv").config();
 const cors = require("cors");
 
@@ -17,6 +18,8 @@ const Options = { limit: "10mb", extended: true };
 const app: Application = express();
 
 const { log } = console;
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname,'..', 'views'));
 app.use(cors());
 app.use(bodyParser.json(Options));
 app.use(bodyParser.urlencoded(Options));
