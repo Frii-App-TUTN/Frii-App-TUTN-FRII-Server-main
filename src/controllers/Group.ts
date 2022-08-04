@@ -152,3 +152,7 @@ exports.removeMember = async (req: Request, res: Response<Group>) => {
         });
     }
 }
+exports.fetchGroup = async (req: Request, res: Response<Group>) => {
+    const { groupName } = req.body;
+
+}
