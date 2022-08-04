@@ -19,7 +19,7 @@ const app: Application = express();
 
 const { log } = console;
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname,'..', 'views'));
+app.set('views', path.join(__dirname,'..', 'assets'));
 app.use(cors());
 app.use(bodyParser.json(Options));
 app.use(bodyParser.urlencoded(Options));
