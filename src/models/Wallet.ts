@@ -22,6 +22,7 @@ export interface WalletSchema {
     accountId: number;
     accountName: string;
     accountNumber: string;
+    amount?: number,
     currency: string;
     createdAt: string;
     updatedAt: string;
@@ -34,6 +35,10 @@ const WalletSchema = new Schema<WalletSchema>({
     accountName: String,
     accountNumber: String,
     currency: String,
+    amount: {
+       type: Number,
+       default: 0
+    },
     createdAt: String,
     updatedAt: String,
     emailAddress: String,

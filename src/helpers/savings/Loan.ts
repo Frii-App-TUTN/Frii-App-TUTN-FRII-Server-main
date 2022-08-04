@@ -1,12 +1,10 @@
-// import { MongooseError } from "mongoose";
+import { response } from 'express'
 import { User} from "../../models/User";
 import nodemailer from 'nodemailer';
 
 
-const validateGuarantors = async (guarantor:any) => {
-    // console.log(typeof(guarantor));
-    if (guarantor.match(/^[0-9a-fA-F]{24}$/)) {
-        // Yes, it's a valid ObjectId, proceed with `findById` call.
+const validateGuarantors = async (guarantor:string) => {
+    if (guarantor) {
         let guarantors = await User.findOne({_id: guarantor});
         if(!guarantors){
             return {
@@ -22,23 +20,15 @@ const validateGuarantors = async (guarantor:any) => {
         }
     }
 
-    return {
+    return response.status(400).json({
         "status": 400,
         "message": guarantor + " is not a valid user ID"
-    };
+    });
     
 }
 
-const validateAmount = async (amount:number) => {
-    if (amount) {
-        return true;
-    // return res.status(400).json({ error: true, message: errors.array() });       }
-    }
-};
-
 
 const loanRequestMail = async (toEmail:string, fromEmail:string, name:string) => {
-    console.log(toEmail, fromEmail, name);
     try {
         if(toEmail && fromEmail && name){
             var transport = nodemailer.createTransport({
@@ -64,22 +54,25 @@ const loanRequestMail = async (toEmail:string, fromEmail:string, name:string) =>
         
             await transport.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    return console.log(error);
+                    return {
+                        "error": true,
+                        "message": "Unable to send mail!"
+                    };
                 }
                 console.log('Message sent: %s', info.messageId, info.response);
     
                 return {
-                    "message": info
+                    "message": info.response
                 }
                 
             });
         }
     } catch (error) {
         return {
-            status: 400,
-            message: "Sender email, recipient email, or username was not inputed"
-        };   
+            "error": true,
+            "message": "Sender email, recipient email, or username was not inputed"
+        }   
     }
 }
 
-module.exports = { validateAmount, validateGuarantors, loanRequestMail };
+module.exports = { validateGuarantors, loanRequestMail };

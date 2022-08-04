@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
+const { tokenValidator } = require("../../helpers/Auth/Validator/Token");
 const LoanController = require('../controllers/Loans.ts')
 const router = Router();
 
@@ -8,12 +9,11 @@ const router = Router();
 // });
 
 router.post('/request-loan',   
-    body("borrower", "Borrower ID is required").not().isEmpty(),
     body("amount", "Amount is required and should not include alphabets or special characters!").not().isEmpty().isNumeric(),
     body("reason", "Please state your reason for the Loan").not().isEmpty(),
     body("due_date", "Please state when you intend to pay back").not().isEmpty(),
-    body("guarantors", "Please add guarantors").not().isEmpty().isArray(),
-    async (req:Request, res:Response, next:NextFunction) => {
+    body("guarantors", "Please add guarantors").not().isEmpty().matches(/^[0-9a-fA-F]{24}$/).isArray(), tokenValidator,
+    async (req:Request, res:Response) => {
     LoanController.requestLoan(req, res);
 });
 

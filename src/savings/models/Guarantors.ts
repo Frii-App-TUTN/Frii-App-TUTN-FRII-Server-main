@@ -2,28 +2,24 @@ import { builtinModules } from 'module';
 import { Schema, model } from 'mongoose';
 
 export interface GuarantorSchema{
-    amount: number,
-    user_id: string[],
-    status: boolean,
+    shareAmount: number,
+    user_id: any,
+    loan_id: any,
     dateAccepted: Date,
     extensionDate: Date
 }
 
-const GuarantorSchema = new Schema({
-    loanShareAmount: Number,
-    accepted: {
-        type: Boolean,
-        default: 0 
-    },
+const GuarantorSchema = new Schema<GuarantorSchema>({
+    shareAmount: Number, 
     dateAccepted: {
         type: Date,
         default: null
     },
-    extensionAcceptedDate: {
+    extensionDate: {
         type: Date,
         default: null
     },
-    loan: {
+    loan_id: {
         type: Schema.Types.ObjectId,
         ref: 'Loan'
     },
@@ -33,5 +29,4 @@ const GuarantorSchema = new Schema({
     }
 
 }, {timestamps: true});
-
-module.exports = model('Guarantor', GuarantorSchema);
+export const Guarantor = model('Guarantor', GuarantorSchema);

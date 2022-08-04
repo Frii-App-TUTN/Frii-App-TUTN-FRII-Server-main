@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
 require("dotenv").config();
+require("../savings/models/seeds/wallet").seedWallets();
 const cors = require("cors");
 
 interface Server {

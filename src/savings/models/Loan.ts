@@ -44,4 +44,21 @@ const loanSchema = new Schema<loanSchema>({
 
 }, {timestamps: true});
 
+// export interface loanPaymentSchema{
+//     loan_id: any,
+//     paid_amount: number,
+//     actual_amount: number,
+//     amount_remaining: number
+// }
+
+// const loanPaymentSchema = new Schema<loanPaymentSchema>({
+//     paid_amount: Number,
+//     actual_amount: Number,
+//     amount_remaining: Number,
+//     loan_id: {
+//         type: Schema.Types.ObjectId,
+//         ref: 'Loan'
+//     }
+// });
 module.exports = model('Loan', loanSchema);
+// module.exports = model('loanPayment', loanPaymentSchema);
