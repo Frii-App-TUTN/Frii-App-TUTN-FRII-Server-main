@@ -28,7 +28,7 @@ export interface AddUserSchema {
     groupName: string;
     createdAt: number;
     expired: boolean;
-    userEmail: String;
+    userEmail: string;
 }
 const AddUserSchema = new Schema<AddUserSchema>({
     code: Number,
