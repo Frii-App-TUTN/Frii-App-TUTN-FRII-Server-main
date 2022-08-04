@@ -58,7 +58,7 @@ exports.createGroup = async (req: Request, res: Response<Group>) => {
 } 
 exports.addMember = async (req: Request, res: Response<Group>) => {
     const { userEmail, groupName }: RequestBody = req.body;
-    if (groupName) {
+    if (!!groupName) {
         let group = await Group.findOne<GroupSchema>({ name: groupName });
         if (!!group) {
             const code:number = createRandomNumber(8);
@@ -97,5 +97,31 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
 }
 exports.joinGroup = async (req: Request, res: Response<Group>) => { 
     const { code } = req.params;
-    res.render('join');  
+    const addUser = await AddUser.findOneAndDelete<AddUserSchema>({ code });
+    if (addUser) {
+        const { userEmail, groupName } = addUser;
+        let group = await Group.findOne<GroupSchema>({ groupName });
+        if (group) {
+            const { members } = group;
+            if (members.indexOf(userEmail) < 0) {
+                const newMembers = [...members, userEmail];
+                group = await Group.findOneAndUpdate(
+                    { groupName },
+                    { members: newMembers }
+                );
+                res.status(202).render('join', { groupName });  
+            } else {
+                return res.status(401).json({
+                    error: false,
+                    message: 'user already in group'
+                })
+            }
+    }
+    else {
+        return res.status(404).json({ error: true, message: 'group with name not found' });
+    }
+    } else {
+        return res.status(410).json({ error: true, message: 'Invite Expired' });
+    }
+    // res.render('join',{groupName});  
 }
