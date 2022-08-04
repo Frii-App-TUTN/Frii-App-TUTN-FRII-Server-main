@@ -5,8 +5,7 @@ const { createGroup, addMember, joinGroup, removeMember, fetchGroup, renameGroup
 router.post('/create', createGroup);
 router.put('/addmember', addMember);
 router.get('/join/:code', joinGroup);
-
-router.put('/removemember', removeMember)
+router.put('/removemember', removeMember);
 router.get('/fetch', fetchGroup);
 router.put('/rename', renameGroup);
 
