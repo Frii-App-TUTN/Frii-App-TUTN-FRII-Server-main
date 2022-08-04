@@ -7,6 +7,7 @@ const validateGuarantors = async (guarantor:string) => {
     if (guarantor) {
         let guarantors = await User.findOne({_id: guarantor});
         if(!guarantors){
+            console.log("Not guarantors")
             return {
                 "error": true,
                 "status": 400,
@@ -54,6 +55,7 @@ const loanRequestMail = async (toEmail:string, fromEmail:string, name:string) =>
         
             await transport.sendMail(mailOptions, (error, info) => {
                 if (error) {
+                    console.log("error");
                     return {
                         "error": true,
                         "message": "Unable to send mail!"

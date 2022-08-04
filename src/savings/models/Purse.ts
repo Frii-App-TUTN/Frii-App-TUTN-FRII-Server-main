@@ -1,13 +1,14 @@
 import { Schema, model } from 'mongoose';
+import { WalletSchema } from '../../models/Wallet';
 
 export interface PurseSchema{
     name: string;
     amount: number;
     expectedAmount: number,
-    currentAmount: number,
+    currentAmount?: number,
     category: string;
     lock_status: boolean;
-    wallet: string;
+    wallet: WalletSchema;
     status: boolean,
     desc?: string
 }
@@ -31,14 +32,14 @@ const PurseSchema = new Schema<PurseSchema>({
         type: Boolean,
         default: false
     },
-    // wallet: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Wallet'
-    // },
+    wallet: {
+        type: Schema.Types.ObjectId,
+        ref: 'Wallet'
+    },
     status: {
         type: Boolean,
         default: true
     }
 }, {timestamps: true});
 
-module.exports = model('Purse', PurseSchema);
+export const Purse = model('Purse', PurseSchema);

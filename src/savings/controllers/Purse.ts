@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { User, UserSchema } from "../../models/User";
+const jwt = require("jsonwebtoken");
+import { Wallet, WalletSchema } from "../../models/Wallet";
 const Purse = require('../models/Purse');
 
 interface createPurse {
@@ -17,13 +20,33 @@ const createPurse = async (req: Request, res: Response, next:NextFunction) => {
         return res.status(400).json({ error: true, message: errors.array() });
     }
     try {
+        if (req.headers["authorization"] === undefined) {
+            return res
+              .status(400)
+              .send({ error: true, message: "Token is required" });
+        }
+        const token = req.headers["authorization"].split(' ')[1];
+        if (!token)
+        {
+            return res.status(500).send("User not authorized");
+        }
+        let decodedToken = jwt.verify(token, process.env.SECRET_HASH)
+        const userId = decodedToken.userId;
+        let UserDetail = await User.findOne<UserSchema>({_id: userId});
+        if(!UserDetail){
+            return res.status(400).send("Invalid User");
+        }
+        let userEmail = UserDetail.email;
+        let wallet = await Wallet.findOne({emailAddress: userEmail});
+        if(!wallet){
+            return res.status(500).send("User with email: " + userEmail + " is yet to have a wallet");
+        }
         let purseData =  await Purse.findOne({name});
 
         if(!purseData){
-            purseData = new Purse({name, expectedAmount, desc, category});
-            await purseData.save()
+            purseData = new Purse({name, expectedAmount, desc, category, wallet: wallet._id});
+            await purseData.save();
             res.status(201).json(purseData);
-            // console.log(purseData);
         }else{
             res.json({
                 message: "Purse name already in use"

@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { UserSchema } from '../../models/User';
+import { GuarantorSchema } from './Guarantors';
 
 export interface loanSchema{
     amount: string,
@@ -8,7 +9,7 @@ export interface loanSchema{
     desc: string,
     status: string,
     guarantors: UserSchema,
-    borrower: UserSchema,
+    borrower: GuarantorSchema,
     dateAccepted: Date,
     extensionDate: Date
 }
