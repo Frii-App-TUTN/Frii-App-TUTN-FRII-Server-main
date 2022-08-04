@@ -12,6 +12,7 @@ type RequestBody = {
     emailAddress?: string;
     groupName?: string;
     userEmail: string;
+    newName?: string;
 };
 exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName }:RequestBody = req.body;
@@ -98,18 +99,22 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
 exports.joinGroup = async (req: Request, res: Response) => { 
     const { code } = req.params;
     const addUser = await AddUser.findOneAndDelete<AddUserSchema>({ code });
-    if (addUser) {
+    if (!!addUser) {
         const { userEmail, groupName } = addUser;
-        let group = await Group.findOne<GroupSchema>({ groupName });
-        if (group) {
+        let group = await Group.findOne<GroupSchema>({ name: groupName });
+        if (!!group) {
             const { members } = group;
             if (members.indexOf(userEmail) < 0) {
                 const newMembers = [...members, userEmail];
                 group = await Group.findOneAndUpdate(
-                    { groupName },
+                    { name: groupName },
                     { members: newMembers }
                 );
-                res.status(202).render('join', { groupName });  
+                if (!!group) {
+                  return  res.status(202).render('join', { groupName });
+                } else {
+                    return res.status(500).render('error', { message: "Failed to Add User to group" });
+                }
             } else {
                 return res.status(401).render('error', { message: "User already in group"  });  
             }
@@ -123,21 +128,29 @@ exports.joinGroup = async (req: Request, res: Response) => {
 }
 exports.removeMember = async (req: Request, res: Response<Group>) => {
     const { userEmail, groupName }: RequestBody = req.body;
-    let group = await Group.findOne<GroupSchema>({ groupName });
-    if (group) {
+    let group = await Group.findOne<GroupSchema>({ name: groupName });
+    if (!!group) {
         const { members } = group;
         let newMembers = [...members];
         const userIndexInGroup = newMembers.indexOf(userEmail);
         if (userIndexInGroup > -1) {
             newMembers.splice(userIndexInGroup, 1);
             group = await Group.findOneAndUpdate(
-                { groupName },
+                { name: groupName },
                 { members: newMembers }
             );
-            res.status(202).json({
-                error: false,
-                message: "User Removed"
-            });
+            if (!!group) {
+                res.status(202).json({
+                    error: false,
+                    message: "User Removed"
+                });
+            } else {
+                return res.status(500).json({
+                    error: false,
+                    message: "Failed To remove user from group"
+                });
+
+            }
         } else {
             return res.status(404).json({
                 error: true,
@@ -147,12 +160,58 @@ exports.removeMember = async (req: Request, res: Response<Group>) => {
     }
     else {
         return res.status(404).json({
-            error: false,
+            error: true,
             message: "Group not found"
         });
     }
 }
 exports.fetchGroup = async (req: Request, res: Response<Group>) => {
-    const { groupName } = req.body;
+    const { groupName }:RequestBody = req.body;
+    let group = await Group.findOne<GroupSchema>({ name: groupName });
+    if (!!group) { 
+        return res.status(200).json({
+            error: false,
+            data: group,
+        });
+    } else {
+        return res.status(404).json({
+            error: true,
+            message: "Group not found"
+        });
+    }
 
+}
+exports.renameGroup = async (req: Request, res: Response<Group>) => {
+    const { groupName, newName }: RequestBody = req.body;
+    let group = await Group.findOne<GroupSchema>({ name: groupName });
+    if (!!group) {
+        let nameTaken = await Group.findOne<GroupSchema>({ name: newName });
+        if (!nameTaken) {
+            group = await Group.findOneAndUpdate(
+                { name: groupName },
+                { name: newName }
+            );
+            if (!!group) {
+                return res.status(202).json({
+                    error: false,
+                    message: "Rename Successful"
+                })
+            } else {
+                return res.status(500).json({
+                    error: true,
+                    message: "Failed to save update name"
+                })
+            }
+        } else {
+            return res.status(409).json({
+                error: true,
+                message: "Group Name Already Taken"
+            });
+        }
+    } else {
+        return res.status(404).json({
+            error: true,
+            message: "Group not found"
+        });
+    }
 }
