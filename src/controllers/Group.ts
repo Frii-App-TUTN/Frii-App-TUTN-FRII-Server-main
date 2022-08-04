@@ -97,5 +97,5 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
 }
 exports.joinGroup = async (req: Request, res: Response<Group>) => { 
     const { code } = req.params;
-   
+    res.render('join');  
 }
