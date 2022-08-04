@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
 require("dotenv").config();
+require("../savings/models/seeds/wallet").seedWallets();
 const cors = require("cors");
 
 interface Server {
@@ -27,9 +28,15 @@ app.use("/", require("../routes/index"));
 app.use("/auth", require("../routes/auth"));
 app.use("/account", require("../routes/account"));
 app.use("/kin", require("../routes/kin"));
+app.use("/group", require("../routes/group"));
+
+// Saving Routes
+app.use('/savings', require('../savings/routes/purse'));
+app.use('/savings', require('../savings/routes/loans'));
 
 const PORT = 3000 || process.env.PORT;
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_LINK;
+
 type options = {
   useNewUrlParser: boolean;
   useUnifiedTopology: boolean;
