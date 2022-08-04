@@ -10,7 +10,7 @@ interface Group {
 }
 type RequestBody = {
     emailAddress?: string;
-    groupName: string;
+    groupName?: string;
     userEmail: string;
 };
 exports.createGroup = async (req: Request, res: Response<Group>) => {
@@ -95,7 +95,7 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
         })  
     }
 }
-exports.joinGroup = async (req: Request, res: Response<Group>) => { 
+exports.joinGroup = async (req: Request, res: Response) => { 
     const { code } = req.params;
     const addUser = await AddUser.findOneAndDelete<AddUserSchema>({ code });
     if (addUser) {
@@ -120,4 +120,35 @@ exports.joinGroup = async (req: Request, res: Response<Group>) => {
     } else {
         return res.status(410).render('error', { message: "Invite Expired" });
     } 
+}
+exports.removeMember = async (req: Request, res: Response<Group>) => {
+    const { userEmail, groupName }: RequestBody = req.body;
+    let group = await Group.findOne<GroupSchema>({ groupName });
+    if (group) {
+        const { members } = group;
+        let newMembers = [...members];
+        const userIndexInGroup = newMembers.indexOf(userEmail);
+        if (userIndexInGroup > -1) {
+            newMembers.splice(userIndexInGroup, 1);
+            group = await Group.findOneAndUpdate(
+                { groupName },
+                { members: newMembers }
+            );
+            res.status(202).json({
+                error: false,
+                message: "User Removed"
+            });
+        } else {
+            return res.status(404).json({
+                error: true,
+                message: "User Not In group"
+            });
+        }
+    }
+    else {
+        return res.status(404).json({
+            error: false,
+            message: "Group not found"
+        });
+    }
 }
