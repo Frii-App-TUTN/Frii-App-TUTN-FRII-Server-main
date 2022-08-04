@@ -111,17 +111,13 @@ exports.joinGroup = async (req: Request, res: Response<Group>) => {
                 );
                 res.status(202).render('join', { groupName });  
             } else {
-                return res.status(401).json({
-                    error: false,
-                    message: 'user already in group'
-                })
+                return res.status(401).render('error', { message: "User already in group"  });  
             }
     }
     else {
-        return res.status(404).json({ error: true, message: 'group with name not found' });
+            return res.status(404).render('error', { message: "group with name not found" });
     }
     } else {
-        return res.status(410).json({ error: true, message: 'Invite Expired' });
-    }
-    // res.render('join',{groupName});  
+        return res.status(410).render('error', { message: "Invite Expired" });
+    } 
 }
