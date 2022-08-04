@@ -10,8 +10,8 @@ interface Group {
 }
 type RequestBody = {
     emailAddress?: string;
-    groupName?: string;
-    userEmail?: string;
+    groupName: string;
+    userEmail: string;
 };
 exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName }:RequestBody = req.body;
@@ -61,15 +61,15 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
     if (groupName) {
         let group = await Group.findOne<GroupSchema>({ name: groupName });
         if (!!group) {
-            const code = createRandomNumber(8);
-            let link = process.env.BASE_URL + code;
-            let addUser = new AddUser({
+            const code:number = createRandomNumber(8);
+            let link:string = String(process.env.BASE_URL) + code;
+            let addUser = new AddUser<AddUserSchema>({
                 code,
                 groupName,
                 createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
                 userEmail,
                 expired: false
-            })
+            });
             await addUser.save();
             let { Admin } = group;
             await sendMail(`Join ${groupName}`,
@@ -97,8 +97,5 @@ exports.addMember = async (req: Request, res: Response<Group>) => {
 }
 exports.joinGroup = async (req: Request, res: Response<Group>) => { 
     const { code } = req.params;
-    console.log(req.params, typeof code);
-    return res.status(200).json({
-        error:false,
-    })
+   
 }
