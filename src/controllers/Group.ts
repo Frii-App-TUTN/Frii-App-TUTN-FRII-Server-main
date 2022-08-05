@@ -18,7 +18,6 @@ type RequestBody = {
 exports.createGroup = async (req: Request, res: Response<Group>) => {
     const { emailAddress, groupName }: RequestBody = req.body;
     const errors = validationResult(req);
-    console.log(errors);
     if (!errors.isEmpty()) {
         return res.status(400).json({
             error: true,
@@ -26,84 +25,96 @@ exports.createGroup = async (req: Request, res: Response<Group>) => {
             data: errors.array()
         });
     }
-    if (!!emailAddress ) {
-        const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
-        if (!!user) {
-            const id:number = createRandomNumber(16);
-            const idCheck = await Group.findOne({ id }) ?? false;
-            const name: string = groupName ? groupName : "FRII" + createRandomNumber(8);
-            if (!idCheck) {
-                const group = new Group<GroupSchema>({
-                    id,
-                    Admin: emailAddress,
-                    name,
-                    members: [],
-                    createdAt: Date.now(),
-                    disabled: false,
-                })
-                group.save();
-                return res.status(201).json({
-                    error: false,
-                    message: "created group successfully",
-                    data: group,
-                });
+    else {
+        if (!!emailAddress) {
+            const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
+            if (!!user) {
+                const id: number = createRandomNumber(16);
+                const idCheck = await Group.findOne({ id }) ?? false;
+                const name: string = groupName ? groupName : "FRII" + createRandomNumber(8);
+                if (!idCheck) {
+                    const group = new Group<GroupSchema>({
+                        id,
+                        Admin: emailAddress,
+                        name,
+                        members: [],
+                        createdAt: Date.now(),
+                        disabled: false,
+                    })
+                    group.save();
+                    return res.status(201).json({
+                        error: false,
+                        message: "created group successfully",
+                        data: group,
+                    });
                 
+                } else {
+                    res.status(500).json({
+                        error: true,
+                        message: "id Generated already exists"
+                    })
+                }
             } else {
-                res.status(500).json({
+                return res.status(404).json({
                     error: true,
-                    message: "id Generated already exists"
-                })
+                    message: "user with email not found"
+                });
             }
         } else {
-            return res.status(404).json({
+            res.status(400).json({
                 error: true,
-                message: "user with email not found"
-            });
+                message: "invalid request",
+            })
         }
-    } else {
-        res.status(400).json({
-            error: true,
-            message: "invalid request",
-        })
     }
 } 
 exports.addMember = async (req: Request, res: Response<Group>) => {
     const { userEmail, groupName }: RequestBody = req.body;
-    if (!!groupName && !!userEmail) {
-        let group = await Group.findOne<GroupSchema>({ name: groupName });
-        if (!!group) {
-            const code:number = createRandomNumber(8);
-            let link:string = String(process.env.BASE_URL) + code;
-            let addUser = new AddUser<AddUserSchema>({
-                code,
-                groupName,
-                createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
-                userEmail,
-                expired: false
-            });
-            await addUser.save();
-            let { Admin } = group;
-            await sendMail(`Join ${groupName}`,
-                `The Admin  {{Admin}} Of ${groupName} want's you to join his/her group.
-            \n use the [link]({{link}}) below to join the group [{{link}}]({{link}})
-            \n Please ignore if you do not recognize this message`,
-                { Admin, link },
-                userEmail);
-            return  res.status(200).json({
-                error: false,
-                message: "email sent"
-            });
-        } else {
-            return res.status(404).json({
-                error: true,
-                message: "group with this name not found"
-            })
-        }
-    } else {
-        res.status(400).json({
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
             error: true,
             message: "invalid request",
-        })  
+            data: errors.array()
+        });
+    }
+    else {
+        if (!!groupName && !!userEmail) {
+            let group = await Group.findOne<GroupSchema>({ name: groupName });
+            if (!!group) {
+                const code: number = createRandomNumber(8);
+                let link: string = String(process.env.BASE_URL) + code;
+                let addUser = new AddUser<AddUserSchema>({
+                    code,
+                    groupName,
+                    createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                    userEmail,
+                    expired: false
+                });
+                await addUser.save();
+                let { Admin } = group;
+                await sendMail(`Join ${groupName}`,
+                    `The Admin  {{Admin}} Of ${groupName} want's you to join his/her group.
+            \n use the [link]({{link}}) below to join the group [{{link}}]({{link}})
+            \n Please ignore if you do not recognize this message`,
+                    { Admin, link },
+                    userEmail);
+                return res.status(200).json({
+                    error: false,
+                    message: "email sent"
+                });
+            } else {
+                return res.status(404).json({
+                    error: true,
+                    message: "group with this name not found"
+                })
+            }
+        } else {
+            res.status(400).json({
+                error: true,
+                message: "invalid request",
+            })
+        }
     }
 }
 exports.joinGroup = async (req: Request, res: Response) => { 
