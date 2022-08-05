@@ -2,7 +2,8 @@ require('dotenv').config();
 import { Response, Request } from "express";
 import { User, UserSchema } from '../models/User';
 import { GroupSchema, Group, AddUserSchema, AddUser  } from '../models/Group';
-const {createRandomNumber, sendMail} = require('../helpers/helpers');
+const { createRandomNumber, sendMail } = require('../helpers/helpers');
+import { validationResult } from 'express-validator';
 interface Group {
     error: boolean;
     message?: string;
@@ -15,8 +16,17 @@ type RequestBody = {
     newName?: string;
 };
 exports.createGroup = async (req: Request, res: Response<Group>) => {
-    const { emailAddress, groupName }:RequestBody = req.body;
-    if (!!emailAddress && !!groupName) {
+    const { emailAddress, groupName }: RequestBody = req.body;
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            error: true,
+            message: "invalid request",
+            data: errors.array()
+        });
+    }
+    if (!!emailAddress ) {
         const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
         if (!!user) {
             const id:number = createRandomNumber(16);
