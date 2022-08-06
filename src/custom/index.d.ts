@@ -5,11 +5,11 @@ declare global {
             error: boolean;
             message?: string;
             data?: any;
-        };
+        }
         interface ReqBody {
             user?: string;
-        };
+        }
          type Req<Request, ReqBody> = Request & ReqBody;
-    };
+    }
 }
 export = Custom;
