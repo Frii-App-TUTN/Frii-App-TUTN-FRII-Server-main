@@ -29,8 +29,6 @@ app.use("/auth", require("../routes/auth"));
 app.use("/account", require("../routes/account"));
 app.use("/kin", require("../routes/kin"));
 app.use("/group", require("../routes/group"));
-
-// Saving Routes
 app.use('/savings', require('../savings/routes/purse'));
 app.use('/savings', require('../savings/routes/loans'));
 
