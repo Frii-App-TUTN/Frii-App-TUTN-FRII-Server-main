@@ -1,9 +1,11 @@
 require('dotenv').config();
 import {createHmac} from 'crypto';
-
+import { CourierClient } from "@trycourier/courier";
 interface Helpers  {
     hash?: (str?:string) => string|boolean;
-    createRandomString?: (strLength?:number|boolean) => string|boolean;
+  createRandomString?: (strLength?: number | boolean) => string | boolean;
+  createRandomNumber?: (length: number | boolean) => Number | boolean; 
+  sendMail?: (title: string, body: string, data: object, email: string) => void;
 }
 const secretKey: string|undefined = process.env.SECRET_HASH;
 const helpers: Helpers = {}
@@ -51,5 +53,48 @@ helpers.createRandomString = (strLength) => {
     return false;
   }
 };
+helpers.createRandomNumber = (length) => {
+  length = typeof (length) == 'number' && length > 0 ? length : false;
+    
+    if (length) {
+    
+    // Define all the possible characters that can go into a string;  
+    let Numbers = '1234567890';
+
+    let str = '';
+
+      for (let i = 1; i <= length; i++) {
+            // Get random character from the possible string
+        let randomCharacter = Numbers.charAt(Math.floor(Math.random() * Numbers.length));
+            // Append this character to the final string
+             str += randomCharacter;
+      
+    }
+    //return the final string
+    return Number(str);
+
+  } else {
+    return false;
+  }
+};
+helpers.sendMail = async (title:string,body:string,data:object,email:string) => {
+  const courier = CourierClient({
+    authorizationToken: process.env.COURIER_AUTH_TOKEN,
+  });
+  const { requestId } = await courier.send({
+    message: {
+      content: {
+        title,
+        body
+
+      },
+      data,
+      to: {
+        email
+      },
+    },
+  });
+  return requestId;
+}
 module.exports = helpers;
 

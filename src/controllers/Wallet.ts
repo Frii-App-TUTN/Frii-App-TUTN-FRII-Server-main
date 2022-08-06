@@ -2,16 +2,12 @@ require('dotenv').config()
 import { Request, Response, NextFunction, Router } from "express";
 import { Customer, Wallet, WalletSchema, customerSchema } from '../models/Wallet';
 import { User, UserSchema } from '../models/User';
-const https = require('https');
+import { Res } from '../custom';
 const { createCustomer, createAccount } = require('../helpers/wallet/account');
+import { Req, ReqBody } from "../custom";
 
-interface Wallet {
-    error: boolean;
-    message?: string;
-    data?: any;
-}
-exports.createWallet = async (req: Request,
-    res: Response<Wallet>
+exports.createWallet = async (req: Req<Request, ReqBody>,
+    res: Response<Res>
     ,next: NextFunction) => {
     // send request to 
     const { emailAddress } = req.body;
@@ -106,7 +102,7 @@ exports.createWallet = async (req: Request,
 }
 
 exports.fetchWallet = async (req: Request,
-    res: Response<Wallet>
+    res: Response<Res>
     , next: NextFunction) => {
     // send request to 
     const { emailAddress } = req.body;

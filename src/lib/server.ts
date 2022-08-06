@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import bodyParser from "body-parser";
 import { connect } from "mongoose";
+import path from "path";
 require("dotenv").config();
 require("../savings/models/seeds/wallet").seedWallets();
 const cors = require("cors");
@@ -18,6 +19,8 @@ const Options = { limit: "10mb", extended: true };
 const app: Application = express();
 
 const { log } = console;
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname,'..', 'assets'));
 app.use(cors());
 app.use(bodyParser.json(Options));
 app.use(bodyParser.urlencoded(Options));
