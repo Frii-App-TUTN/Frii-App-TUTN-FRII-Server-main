@@ -15,7 +15,10 @@ const AuthMiddleWare = async (req:Req<Request,ReqBody>, res: Response, next: Nex
         }
     }
     else {
-        return res.status(401).json({})
+        return res.status(401).json({
+            error: true,
+            message: "UnAuthorized user"
+        })
     }
         
 }
