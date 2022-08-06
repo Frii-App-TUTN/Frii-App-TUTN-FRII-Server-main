@@ -1,4 +1,5 @@
 import { Schema, model, Types } from "mongoose";
+
 export interface KinSchema {
   createdBy: string;
   firstName: string;
