@@ -14,6 +14,6 @@ declare global {
             newName?: string;
         }
          type Req<Request, ReqBody> = Request & ReqBody;
-    };
-}
+    }
+};
 export = Custom;
