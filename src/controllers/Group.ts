@@ -5,13 +5,15 @@ import { GroupSchema, Group, AddUserSchema, AddUser  } from '../models/Group';
 const { createRandomNumber, sendMail } = require('../helpers/helpers');
 import { validationResult } from 'express-validator';
 import { Res } from "../custom";
+import { Req, ReqBody } from "../custom";
+
 type RequestBody = {
     emailAddress?: string;
     groupName?: string;
     userEmail: string;
     newName?: string;
 };
-exports.createGroup = async (req: Request, res: Response<Res>) => {
+exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
     const { emailAddress, groupName }: RequestBody = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -64,7 +66,7 @@ exports.createGroup = async (req: Request, res: Response<Res>) => {
         }
     }
 } 
-exports.addMember = async (req: Request, res: Response<Res>) => {
+exports.addMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
     const { userEmail, groupName }: RequestBody = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -113,7 +115,7 @@ exports.addMember = async (req: Request, res: Response<Res>) => {
         }
     }
 }
-exports.joinGroup = async (req: Request, res: Response) => { 
+exports.joinGroup = async (req: Req<Request, ReqBody>, res: Response) => { 
     const { code } = req.params;
     const addUser = await AddUser.findOneAndDelete<AddUserSchema>({ code });
     if (!!addUser) {
@@ -143,7 +145,7 @@ exports.joinGroup = async (req: Request, res: Response) => {
         return res.status(410).render('error', { message: "Invite Expired" });
     } 
 }
-exports.removeMember = async (req: Request, res: Response<Res>) => {
+exports.removeMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
     const { userEmail, groupName }: RequestBody = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -200,7 +202,7 @@ exports.removeMember = async (req: Request, res: Response<Res>) => {
         }
     }
 }
-exports.fetchGroup = async (req: Request, res: Response<Res>) => {
+exports.fetchGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
     const { groupName }: RequestBody = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -232,7 +234,7 @@ exports.fetchGroup = async (req: Request, res: Response<Res>) => {
         }
     }
 }
-exports.renameGroup = async (req: Request, res: Response<Res>) => {
+exports.renameGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
     const { groupName, newName }: RequestBody = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
