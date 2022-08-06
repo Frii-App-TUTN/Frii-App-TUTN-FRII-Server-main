@@ -7,14 +7,8 @@ import { validationResult } from 'express-validator';
 import { Res } from "../custom";
 import { Req, ReqBody } from "../custom";
 
-type RequestBody = {
-    emailAddress?: string;
-    groupName?: string;
-    userEmail: string;
-    newName?: string;
-};
 exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { emailAddress, groupName }: RequestBody = req.body;
+    const { emailAddress, groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -67,7 +61,7 @@ exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => 
     }
 } 
 exports.addMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { userEmail, groupName }: RequestBody = req.body;
+    const { userEmail, groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -146,7 +140,7 @@ exports.joinGroup = async (req: Req<Request, ReqBody>, res: Response) => {
     } 
 }
 exports.removeMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { userEmail, groupName }: RequestBody = req.body;
+    const { userEmail, groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -203,7 +197,7 @@ exports.removeMember = async (req: Req<Request, ReqBody>, res: Response<Res>) =>
     }
 }
 exports.fetchGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { groupName }: RequestBody = req.body;
+    const { groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -235,7 +229,7 @@ exports.fetchGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
     }
 }
 exports.renameGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { groupName, newName }: RequestBody = req.body;
+    const { groupName, newName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
