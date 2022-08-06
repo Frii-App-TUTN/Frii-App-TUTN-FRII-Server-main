@@ -1,11 +1,15 @@
 
 declare global {
     declare namespace Custom {
-        export interface Res {
+        interface Res {
             error: boolean;
             message?: string;
             data?: any;
-        }
-    }
+        };
+        interface ReqBody {
+            user?: string;
+        };
+         type Req<Request, ReqBody> = Request & ReqBody;
+    };
 }
 export = Custom;
