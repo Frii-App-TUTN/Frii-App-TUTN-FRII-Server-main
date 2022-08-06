@@ -4,8 +4,9 @@ import { Customer, Wallet, WalletSchema, customerSchema } from '../models/Wallet
 import { User, UserSchema } from '../models/User';
 import { Res } from '../custom';
 const { createCustomer, createAccount } = require('../helpers/wallet/account');
+import { Req, ReqBody } from "../custom";
 
-exports.createWallet = async (req: Request,
+exports.createWallet = async (req: Req<Request, ReqBody>,
     res: Response<Res>
     ,next: NextFunction) => {
     // send request to 
