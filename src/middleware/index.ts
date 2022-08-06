@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { CallbackError } from "mongoose";
 import { UserSchema, User } from "../models/User";
-interface ReqBody{
-    user?: string;
-}
-type Req<Request, ReqBody> = Request & ReqBody;
+import { Req, ReqBody } from "../custom";
+
 const AuthMiddleWare = async (req:Req<Request,ReqBody>, res: Response, next: NextFunction) => {
     const authToken = req.headers["authorization"];
     if (authToken !== undefined) {
@@ -21,3 +19,4 @@ const AuthMiddleWare = async (req:Req<Request,ReqBody>, res: Response, next: Nex
     }
         
 }
+export default AuthMiddleWare;
