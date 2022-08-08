@@ -22,5 +22,9 @@ router.put('/rename',
     body("groupName", "group name is required").isString(),
     body("newName", "new group name is required").isString(),
     renameGroup);
+// router.put('/request',
+//     body("groupName", "group name is required").isString(),
+//     body("newName", "new group name is required").isString(),
+//     requestLoan);
 
 module.exports = router;
