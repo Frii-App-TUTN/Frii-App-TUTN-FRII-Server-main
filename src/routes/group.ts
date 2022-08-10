@@ -5,6 +5,14 @@ import { body } from 'express-validator';
 const { createGroup, addMember, joinGroup, removeMember, fetchGroup, renameGroup } = require('../controllers/Group');
     router.post('/create',
         body("emailAddress", "Email address of admin required").isEmail(),
+        body("groupName", "Name of group to is required").isString(),
+        body("groupType", "specify the type of group being created").isString(),
+        body("threshold", "specify the threshold amount").isString(),
+        body("duration", "Specify lock duration").isNumeric(),
+        body("friiPeriod", "Specify FRII period").isNumeric(),
+        body("reason", "Specify reason for account creation").isString(),
+        body("description", "A description is required").isString(),
+        body("visibility", "group visibility is required").isBoolean(),
     createGroup);
 router.put('/addmember',
     body("userEmail", "Email address of new member required").isEmail(),
