@@ -8,7 +8,7 @@ import { Res } from "../custom";
 import { Req, ReqBody } from "../custom";
 
 exports.createGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
-    const { emailAddress, groupName, groupType, threshold, duration, friiPeriod, reason, description, status } = req.body;
+    const { emailAddress, groupName, groupType, threshold, duration, friiPeriod, reason, description, visibility } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -39,7 +39,7 @@ exports.createGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>)
                         friiPeriod,
                         reason,
                         description,
-                        status
+                        visibility
                     })
                     group.save();
                     return res.status(201).json({
