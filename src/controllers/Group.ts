@@ -8,7 +8,7 @@ import { Res } from "../custom";
 import { Req, ReqBody } from "../custom";
 
 exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { emailAddress, groupName } = req.body;
+    const { emailAddress, groupName, groupType, threshold, duration, period, reason, description } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
