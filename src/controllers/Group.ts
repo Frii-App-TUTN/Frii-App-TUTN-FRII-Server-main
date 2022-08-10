@@ -314,7 +314,7 @@ exports.pingAdmin = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
                 await addUser.save();
                 const { Admin } = group;
                 await sendMail(`Join ${groupName}`,
-                    `{{userEmail}} has requested to join {{groupName}}`,
+                    `{{userEmail}} has requested to join {{groupName}} click [here]({{link}}) to approve request`,
                     { userEmail, groupName },
                     Admin);
             } else {
