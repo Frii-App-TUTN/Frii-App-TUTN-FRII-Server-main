@@ -304,6 +304,14 @@ exports.pingAdmin = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
             if (!!group) {
                 const code: number = createRandomNumber(8);
                 let link: string = String(process.env.BASE_URL) + "accept/" + code;
+                let addUser = new AddUser<AddUserSchema>({
+                    code,
+                    groupName,
+                    createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                    userEmail,
+                    expired: false
+                });
+                await addUser.save();
                 const { Admin } = group;
                 await sendMail(`Join ${groupName}`,
                     `{{userEmail}} has requested to join {{groupName}}`,
