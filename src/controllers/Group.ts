@@ -82,7 +82,7 @@ exports.addMember = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
             let group = await Group.findOne<GroupSchema>({ name: groupName });
             if (!!group) {
                 const code: number = createRandomNumber(8);
-                let link: string = String(process.env.BASE_URL) + code;
+                let link: string = String(process.env.BASE_URL) + "join/" + code;
                 let addUser = new AddUser<AddUserSchema>({
                     code,
                     groupName,
@@ -91,12 +91,12 @@ exports.addMember = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
                     expired: false
                 });
                 await addUser.save();
-                let { Admin } = group;
+                let { Admin, groupType } = group;
                 await sendMail(`Join ${groupName}`,
-                    `The Admin  {{Admin}} Of ${groupName} want's you to join his/her group.
+                    `The Admin  {{Admin}} Of ${groupName} want's you to join his/her {{groupType}} group.
             \n use the [link]({{link}}) below to join the group [{{link}}]({{link}})
             \n Please ignore if you do not recognize this message`,
-                    { Admin, link },
+                    { Admin, link, groupType },
                     userEmail);
                 return res.status(200).json({
                     error: false,
@@ -289,5 +289,37 @@ exports.renameGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>)
     }
 }
 exports.pingAdmin = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
-
+    const { groupName, userEmail } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            error: true,
+            message: "invalid request",
+            data: errors.array()
+        });
+    }
+    else {
+        if (!!groupName) {
+            let group = await Group.findOne<GroupSchema>({ name: groupName });
+            if (!!group) {
+                const code: number = createRandomNumber(8);
+                let link: string = String(process.env.BASE_URL) + "accept/" + code;
+                const { Admin } = group;
+                await sendMail(`Join ${groupName}`,
+                    `{{userEmail}} has requested to join {{groupName}}`,
+                    { userEmail, groupName },
+                    Admin);
+            } else {
+                return res.status(404).json({
+                    error: true,
+                    message: "Group not found"
+                });
+            }
+        } else {
+            return res.status(400).json({
+                error: true,
+                message: "invalid request"
+            })
+        }
+    }
 }
