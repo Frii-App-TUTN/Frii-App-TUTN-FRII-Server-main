@@ -16,4 +16,4 @@ declare global {
          type Req<Request, ReqBody> = Request & ReqBody;
     }
 };
-export = Custom;
+export default Custom;
