@@ -7,8 +7,8 @@ import { validationResult } from 'express-validator';
 import { Res } from "../custom";
 import { Req, ReqBody } from "../custom";
 
-exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
-    const { emailAddress, groupName, groupType, threshold, duration, period, reason, description } = req.body;
+exports.createGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
+    const { emailAddress, groupName, groupType, threshold, duration, friiPeriod, reason, description, status } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -22,6 +22,7 @@ exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => 
             const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
             if (!!user) {
                 const id: number = createRandomNumber(16);
+                const thresholdValue:number = !!threshold ? threshold : 0;
                 const idCheck = await Group.findOne({ id }) ?? false;
                 const name: string = groupName ? groupName : "FRII" + createRandomNumber(8);
                 if (!idCheck) {
@@ -32,6 +33,13 @@ exports.createGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => 
                         members: [],
                         createdAt: Date.now(),
                         disabled: false,
+                        groupType,
+                        threshold: thresholdValue,
+                        duration,
+                        friiPeriod,
+                        reason,
+                        description,
+                        status
                     })
                     group.save();
                     return res.status(201).json({
