@@ -46,14 +46,14 @@ const GroupSchema = new Schema<GroupSchema>({
 export interface AddUserSchema {
     code: number;
     groupName: string;
-    createdAt: number;
+    expireAt: number;
     expired: boolean;
     userEmail: string;
 }
 const AddUserSchema = new Schema<AddUserSchema>({
     code: Number,
     groupName: String,
-    createdAt: {
+    expireAt: {
         type: Number,
         default: Date.now(),
         required: true,
