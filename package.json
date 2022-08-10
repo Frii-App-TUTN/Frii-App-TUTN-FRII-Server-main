@@ -8,7 +8,7 @@
     "dev": "nodemon ./src/index.ts",
     "build": "tsc -p ."
   },
-  "keywords": [],
+  "keywords": ["mongodb", "express", "nodejs","frii"],
   "author": "",
   "license": "ISC",
   "dependencies": {
