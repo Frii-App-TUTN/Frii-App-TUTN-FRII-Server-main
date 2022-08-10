@@ -22,7 +22,6 @@ exports.createGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>)
             const user = await User.findOne<UserSchema>({ email: emailAddress }) ?? false;
             if (!!user) {
                 const id: number = createRandomNumber(16);
-                const thresholdValue:number = !!threshold ? threshold : 0;
                 const idCheck = await Group.findOne({ id }) ?? false;
                 const name: string = groupName ? groupName : "FRII" + createRandomNumber(8);
                 if (!idCheck) {
@@ -34,7 +33,7 @@ exports.createGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>)
                         createdAt: Date.now(),
                         disabled: false,
                         groupType,
-                        threshold: thresholdValue,
+                        threshold,
                         duration,
                         friiPeriod,
                         reason,
@@ -68,7 +67,7 @@ exports.createGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>)
         }
     }
 } 
-exports.addMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
+exports.addMember = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
     const { userEmail, groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -117,7 +116,7 @@ exports.addMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
         }
     }
 }
-exports.joinGroup = async (req: Req<Request, ReqBody>, res: Response) => { 
+exports.joinGroup = async (req: Req<Request, GroupSchema>, res: Response) => { 
     const { code } = req.params;
     const addUser = await AddUser.findOneAndDelete<AddUserSchema>({ code });
     if (!!addUser) {
@@ -147,7 +146,7 @@ exports.joinGroup = async (req: Req<Request, ReqBody>, res: Response) => {
         return res.status(410).render('error', { message: "Invite Expired" });
     } 
 }
-exports.removeMember = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
+exports.removeMember = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
     const { userEmail, groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -204,7 +203,7 @@ exports.removeMember = async (req: Req<Request, ReqBody>, res: Response<Res>) =>
         }
     }
 }
-exports.fetchGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
+exports.fetchGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
     const { groupName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -236,7 +235,7 @@ exports.fetchGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
         }
     }
 }
-exports.renameGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => {
+exports.renameGroup = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
     const { groupName, newName } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -288,4 +287,7 @@ exports.renameGroup = async (req: Req<Request, ReqBody>, res: Response<Res>) => 
         });
         }
     }
+}
+exports.pingAdmin = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
+
 }
