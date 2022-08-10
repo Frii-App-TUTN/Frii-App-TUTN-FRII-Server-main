@@ -86,7 +86,7 @@ exports.addMember = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
                 let addUser = new AddUser<AddUserSchema>({
                     code,
                     groupName,
-                    createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                    expireAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
                     userEmail,
                     expired: false
                 });
@@ -307,7 +307,7 @@ exports.pingAdmin = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
                 let addUser = new AddUser<AddUserSchema>({
                     code,
                     groupName,
-                    createdAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
+                    expireAt: Date.now() + 1000 * 60 * 60 * 24 * 7,
                     userEmail,
                     expired: false
                 });
