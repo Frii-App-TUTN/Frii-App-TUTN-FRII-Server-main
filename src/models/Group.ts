@@ -12,7 +12,7 @@ export interface GroupSchema {
     friiPeriod: number;
     reason: string;
     description: string;
-    status: string;
+    visibility: boolean;
 };
 const GroupSchema = new Schema<GroupSchema>({
     id: Number,
@@ -38,8 +38,11 @@ const GroupSchema = new Schema<GroupSchema>({
     friiPeriod: Number,
     reason: String,
     description: String,
-    status: String
-});
+    visibility: {
+        type: Boolean,
+        default: true
+    }
+})
 export interface AddUserSchema {
     code: number;
     groupName: string;
