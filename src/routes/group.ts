@@ -2,7 +2,7 @@ require('dotenv').config();
 import { Router } from "express";
 const router = Router();
 import { body } from 'express-validator';
-const { createGroup, addMember, joinGroup, removeMember, fetchGroup, renameGroup } = require('../controllers/Group');
+const { createGroup, addMember, joinGroup, removeMember, fetchGroup, renameGroup, accept } = require('../controllers/Group');
     router.post('/create',
         body("emailAddress", "Email address of admin required").isEmail(),
         body("groupName", "Name of group to is required").isString(),
@@ -30,10 +30,7 @@ router.put('/rename',
     body("groupName", "group name is required").isString(),
     body("newName", "new group name is required").isString(),
     renameGroup);
-// router.put('/accept',
-//     body("groupName", "group name is required").isString(),
-//     body("newName", "new group name is required").isString(),
-//     renameGroup);
+router.put('/accept/:code',renameGroup);
 // router.put('/request',
 //     body("groupName", "group name is required").isString(),
 //     body("newName", "new group name is required").isString(),

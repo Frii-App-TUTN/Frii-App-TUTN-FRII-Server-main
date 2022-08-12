@@ -331,3 +331,33 @@ exports.pingAdmin = async (req: Req<Request, GroupSchema>, res: Response<Res>) =
         }
     }
 }
+exports.accept = async (req: Req<Request, GroupSchema>, res: Response<Res>) => {
+    const { code } = req.params;
+    const addUser = await AddUser.findOneAndDelete<AddUserSchema>({ code });
+    if (!!addUser) {
+        const { userEmail, groupName } = addUser;
+        let group = await Group.findOne<GroupSchema>({ name: groupName });
+        if (!!group) {
+            const { members } = group;
+            if (members.indexOf(userEmail) < 0) {
+                const newMembers = [...members, userEmail];
+                group = await Group.findOneAndUpdate(
+                    { name: groupName },
+                    { members: newMembers }
+                );
+                if (!!group) {
+                    return res.status(202).render('added', { groupName, userEmail });
+                } else {
+                    return res.status(500).render('error', { message: "Failed to Add User to group" });
+                }
+            } else {
+                return res.status(401).render('error', { message: "User already in group" });
+            }
+        }
+        else {
+            return res.status(404).render('error', { message: "group with name not found" });
+        }
+    } else {
+        return res.status(410).render('error', { message: "Invite Expired" });
+    }
+}
