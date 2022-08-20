@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import { connect } from "mongoose";
 import path from "path";
 require("dotenv").config();
-require("../savings/models/seeds/wallet").seedWallets();
+// require("../savings/models/seeds/wallet").seedWallets();
 const cors = require("cors");
 
 interface Server {
@@ -36,7 +36,7 @@ app.use('/savings', require('../savings/routes/purse'));
 app.use('/savings', require('../savings/routes/loans'));
 
 const PORT = 3000 || process.env.PORT;
-const uri = process.env.MONGODB_LINK;
+const uri = process.env.MONGODB_URI;
 
 type options = {
   useNewUrlParser: boolean;

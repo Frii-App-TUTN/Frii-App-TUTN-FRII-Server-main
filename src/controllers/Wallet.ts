@@ -6,7 +6,7 @@ import { Res } from '../custom';
 const { createCustomer, createAccount } = require('../helpers/wallet/account');
 import { Req, ReqBody } from "../custom";
 
-exports.createWallet = async (req: Req<Request, ReqBody>,
+exports.createWallet = async (req: Req<Request, WalletSchema>,
     res: Response<Res>
     ,next: NextFunction) => {
     // send request to 
@@ -101,7 +101,7 @@ exports.createWallet = async (req: Req<Request, ReqBody>,
     }
 }
 
-exports.fetchWallet = async (req: Request,
+exports.fetchWallet = async (req: Req<Request, WalletSchema>,
     res: Response<Res>
     , next: NextFunction) => {
     // send request to 
