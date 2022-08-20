@@ -6,6 +6,13 @@ export interface GroupSchema {
     createdAt: number;
     disabled: boolean;
     Admin: string;
+    groupType: string;
+    threshold: number;
+    duration: number;
+    friiPeriod: number;
+    reason: string;
+    description: string;
+    visibility: boolean;
 };
 const GroupSchema = new Schema<GroupSchema>({
     id: Number,
@@ -21,19 +28,32 @@ const GroupSchema = new Schema<GroupSchema>({
         type: Boolean,
         default: false,
         required: false
+    },
+    groupType: String,
+    threshold: {
+        type: Number,
+        default: 0
+    },
+    duration: Number,
+    friiPeriod: Number,
+    reason: String,
+    description: String,
+    visibility: {
+        type: Boolean,
+        default: true
     }
-});
+})
 export interface AddUserSchema {
     code: number;
     groupName: string;
-    createdAt: number;
+    expireAt: number;
     expired: boolean;
     userEmail: string;
 }
 const AddUserSchema = new Schema<AddUserSchema>({
     code: Number,
     groupName: String,
-    createdAt: {
+    expireAt: {
         type: Number,
         default: Date.now(),
         required: true,

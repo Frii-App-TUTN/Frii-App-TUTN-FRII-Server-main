@@ -4,11 +4,16 @@
   "description": "Repository for the FRII web app backend team",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon ./src/index.ts",
-    "build": "tsc -p ."
+    "start": "node init && node dist/index.js",
+    "dev": "node init && nodemon ./src/index.ts",
+    "build": "node init && tsc -p ."
   },
-  "keywords": [],
+  "keywords": [
+    "mongodb",
+    "express",
+    "nodejs",
+    "frii"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -27,6 +32,7 @@
     "lodash": "^4.17.21",
     "mongodb": "^4.8.0",
     "mongoose": "^6.4.6",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.7",
     "otp-generator": "^4.0.0",
     "pug": "^3.0.2"

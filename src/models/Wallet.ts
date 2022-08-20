@@ -19,6 +19,7 @@ const customerSchema = new Schema<customerSchema>({
     riskAction: { type:String, default:"default"},
 })
 export interface WalletSchema {
+    // _id: string;
     accountId: number;
     accountName: string;
     accountNumber: string;
